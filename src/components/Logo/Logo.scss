@@ -1,0 +1,18 @@
+.logoLink {
+  display: inline-block;
+  text-decoration: none;
+  color: #fff;
+  .logo {
+    background: url('../../images/sprite.png');
+    background-position: 0px 0px;
+    width: 157px;
+    height: 70px;
+    font-size: 0;
+  }
+  &.secundary {
+    .logo {
+      background: url('../../images/sprite.png');
+      background-position: 0px -73px;
+    }
+  }
+}

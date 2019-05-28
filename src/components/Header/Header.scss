@@ -1,0 +1,120 @@
+.header {
+  background: url('https://www.lauras-corner.com/wp-content/uploads/2018/03/are-you-confident-on-the-roads.jpg');
+  background-size: cover;
+  position: relative;
+  &:before {
+    content: '';
+    background: #232c4b;
+    opacity: .77;
+    display: block;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+  }
+  .nav {
+    width: 100%;
+    padding: 15px 0;
+    z-index: 9;
+    transition: all 0.3s ease;
+    .menu {
+      ul {
+        list-style: none;
+        display: flex;
+        padding: 0;
+        margin: 20px 0;
+        justify-content: flex-end;
+        li {
+          a {
+            padding: 12px 15px;
+            text-transform: uppercase;
+            font-size: 13px;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            &:hover {
+              background: #172141;
+            }
+          }
+        }
+      }
+    }
+    * {
+      transition: all 0.3s ease;
+    }
+  }
+  .fixed {
+    background: #232c4b;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    @media(max-width:768px) {
+      justify-content: center;
+    }
+  }
+  .headerContent {
+    padding: 8em 0 13em;
+    .h2 {
+      color: #fff;
+      font-weight: 200;
+      margin-bottom: 30px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+  }
+
+  .buttonBurguer {
+    display: flex;
+    width: 30px;
+    flex-direction: column;
+    position: absolute;
+    top: 25px;
+    z-index: 2;
+    i {
+      display: block;
+      width: 100%;
+      height: 1px;
+      background: #fff;
+      margin: 0 0 7px;
+    }
+  }
+  @media(max-width:768px) {
+    .nav {
+      .menu {
+        display: none;
+      }
+    }
+  }
+}
+.drawer {
+  width: 300px;
+  margin-top: 15px;
+  .brand {
+    width: 100%;
+    padding: 15px;
+    a {
+      display: flex;
+      justify-content: center;
+    }
+  }
+  .menu {
+    ul {
+      padding: 0;
+      margin: 0;
+      list-style: none;
+      li {
+        a {
+          display: block;
+          padding: 15px;
+          color: #172141;
+          border-left: #232c4b solid 0px;
+          border-bottom: 1px solid rgb(233, 235, 238);
+          text-transform: uppercase;
+          font-size: 14px;
+        }
+      }
+    }
+  }
+}
