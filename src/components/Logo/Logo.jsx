@@ -1,6 +1,7 @@
 import React from 'react'
 import classNames from 'classnames'
 import Link from '../Link/Link'
+import logoOnme from '../../images/onme-logo.png'
 import styles from './Logo.scss'
 
 const Logo = props => {
@@ -11,11 +12,11 @@ const Logo = props => {
   
   return (
     <Link
-      to={'/'}
+      to={'/calculadora'}
       className={_class}
     >
       <div className={styles.logo}>
-        Onme Câmbio
+        <img src={logoOnme} alt=""/>
       </div>
     </Link>
   )

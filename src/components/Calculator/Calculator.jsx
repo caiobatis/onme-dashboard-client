@@ -1,9 +1,14 @@
 import React, { Component } from 'react';
+import LoggedLayout from '../DefaultLayout/LoggedLayout';
 
-// import { Container } from './styles';
-
-export default class Calculator extends Component {
-  render() {
-    return <div />;
-  }
+export default function Calculator (){
+  return (
+    <LoggedLayout
+      title="Calculadora"
+    >
+    <div className="calculator">
+      teste
+    </div>
+    </LoggedLayout>
+  )
 }
