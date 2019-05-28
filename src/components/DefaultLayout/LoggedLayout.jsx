@@ -12,6 +12,11 @@ import Grid from '@material-ui/core/Grid';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Logo from '../Logo/Logo'
+import { mainItems, secondaryItems } from '../MenuBar/MenuBar'
+import Divider from '@material-ui/core/Divider';
+import List from '@material-ui/core/List';
+
+
 
 function MadeWithLove() {
   return (
@@ -151,6 +156,9 @@ const LoggedLayout = props => {
             <ChevronLeftIcon />
           </IconButton>
         </div>
+
+        <Divider />
+        <List>{mainItems}</List>
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
