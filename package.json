@@ -1,5 +1,5 @@
 {
-  "name": "freeisencoes-client-react",
+  "name": "onme-dashboard-client",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -48,9 +48,6 @@
     "react-dom": "^16.8.6",
     "react-redux": "^7.0.3",
     "react-router-dom": "^5.0.0",
-    "react-slick": "^0.24.0",
-    "react-sticky": "^6.0.3",
-    "react-swipe": "^6.0.4",
     "redux": "^4.0.1",
     "redux-form": "^8.2.0",
     "redux-multi": "^0.1.12",
@@ -58,7 +55,6 @@
     "redux-thunk": "^2.3.0",
     "resolve": "1.10.0",
     "sass-loader": "7.1.0",
-    "slick-carousel": "^1.8.1",
     "style-loader": "0.23.1",
     "swipe-js-iso": "^2.1.5",
     "terser-webpack-plugin": "1.2.2",
@@ -121,10 +117,6 @@
       "web.jsx",
       "jsx",
       "node"
-    ],
-    "watchPlugins": [
-      "/Users/caiobatistalab/dev/freeisencoes-client-react/node_modules/jest-watch-typeahead/filename.js",
-      "/Users/caiobatistalab/dev/freeisencoes-client-react/node_modules/jest-watch-typeahead/testname.js"
     ]
   },
   "babel": {

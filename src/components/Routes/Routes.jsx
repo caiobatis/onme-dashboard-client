@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { BrowserRouter, Route, Switch } from "react-router-dom"
 import ScrollToTop from './ScrollToTop'
-
-import Home from '../Home/Home'
+import Login from '../Login/Login'
+import Calculator from '../Calculator/Calculator';
 
 class Routes extends Component {
   render() {
@@ -10,7 +10,8 @@ class Routes extends Component {
       <BrowserRouter>
         <ScrollToTop>
           <Switch>
-            <Route exact path="/" component={Home} />
+            <Route exact path="/" component={Login} />
+            <Route exact path="/calculadora" component={Calculator} />
           </Switch>
         </ScrollToTop>
       </BrowserRouter>

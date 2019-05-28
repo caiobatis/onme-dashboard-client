@@ -16,14 +16,3 @@ export const sendContact = values => {
       })
   }
 }
-// export const getCoins = city => {
-//   return dispatch => {
-//     dispatch(fetchCoins(true))
-//     getProducts(city)
-//     .then((res)=> {
-//       dispatch(fetchCoins(false))
-//       dispatch(receiveCoins(serializeCoins(res.data)))
-//     })
-//     .catch(()=> dispatch(fetchCoins(false)))
-//   }
-// }

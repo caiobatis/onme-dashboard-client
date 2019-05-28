@@ -15,7 +15,7 @@ const Logo = props => {
       className={_class}
     >
       <div className={styles.logo}>
-        Free Isenções
+        Onme Câmbio
       </div>
     </Link>
   )
