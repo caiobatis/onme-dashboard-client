@@ -1,4 +1,9 @@
-import React from 'react';
+import React, { Component } from 'react'
+import { connect } from "react-redux"
+import { bindActionCreators } from 'redux'
+import {
+  login
+} from '../../actions/loginActions'
 import Avatar from '@material-ui/core/Avatar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Grid from '@material-ui/core/Grid';
@@ -8,56 +13,59 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Logo from '../Logo/Logo';
 import LoginForm from './LoginForm';
+import styles from './Login.scss'
 
 
-const useStyles = makeStyles(theme => ({
-  '@global': {
-    body: {
-      backgroundColor: theme.palette.common.white,
-    },
-  },
-  paper: {
-    marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-}));
 
-export default function Login() {
-  const classes = useStyles();
+class Login extends Component {
+  constructor (props) {
+    super(props)
 
-  return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Dashboard
-        </Typography>
-        <LoginForm
-          onSubmit={(e)=>console.log(e)}
-        />
-        <br/>
-        <Grid container>
-          <Grid item xs>
-            <Logo/>
+    this.submit = this.submit.bind(this)
+  }
+
+  submit = values => {
+    const {
+      login
+    } = this.props
+
+    login(values)
+  }
+
+  render() {
+    
+    return (
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <div className={styles.paper}>
+          <Avatar className={styles.avatar}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Dashboard
+          </Typography>
+          <LoginForm
+            onSubmit={this.submit}
+          />
+          <br/>
+          <Grid container>
+            <Grid item xs>
+              <Logo/>
+            </Grid>
           </Grid>
-        </Grid>
-      </div>
-    </Container>
-  );
+        </div>
+      </Container>
+    )
+  }
 }
+
+const mapStateToProps = state => ({
+  ...state
+})
+
+const mapDispatchToProps = dispatch => bindActionCreators({
+  login
+}, dispatch)
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
