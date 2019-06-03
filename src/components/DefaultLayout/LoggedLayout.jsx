@@ -113,7 +113,6 @@ function LoggedLayout (props) {
 
 
 	if(!firebase.getCurrentUsername()) {
-		console.error('Please login first')
 		props.history.replace('/login')
 		return null
 	}

@@ -8,7 +8,6 @@ function UnloggedLayout(props) {
 
   async function logout() {
     await firebase.logout()
-    props.history.push('/')
   }
 
   return (
