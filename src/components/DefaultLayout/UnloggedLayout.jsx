@@ -1,9 +1,21 @@
-import React, { Component } from 'react';
+import React, { useEffect } from 'react';
+import firebase from '../../firebase'
 
-// import { Container } from './styles';
+function UnloggedLayout(props) {
+  useEffect(() => {
+    logout()
+  })
 
-export default class UnloggedLayout extends Component {
-  render() {
-    return <div />;
+  async function logout() {
+    await firebase.logout()
+    props.history.push('/')
   }
+
+  return (
+    <div>
+      {props.children}
+    </div>
+  )
+
 }
+export default UnloggedLayout

@@ -9,27 +9,27 @@ let LoginForm = props => {
 
   return (
     <form onSubmit={handleSubmit}>
-        <TextFieldRedux
-          type='email'
-          id="email"
-          label="Email Address"
-          name="email"
-        />
-        <TextFieldRedux
-          name="password"
-          label="Password"
-          type="password"
-          id="password"
-          autoComplete="current-password"
-        />
-        <Button
-          type="submit"
-          fullWidth
-          variant="contained"
-          color="primary"
-        >
-          Entrar
-        </Button>
+      <TextFieldRedux
+        type='email'
+        id="email"
+        label="Email Address"
+        name="email"
+      />
+      <TextFieldRedux
+        name="password"
+        label="Password"
+        type="password"
+        id="password"
+        autoComplete="current-password"
+      />
+      <Button
+        type="submit"
+        fullWidth
+        variant="contained"
+        color="primary"
+      >
+        Entrar
+      </Button>
     </form>
   )
 }

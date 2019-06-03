@@ -1,7 +1,6 @@
-import React from 'react';
+import React from 'react'
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -12,11 +11,10 @@ import Grid from '@material-ui/core/Grid';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Logo from '../Logo/Logo'
-import { mainItems, secondaryItems } from '../MenuBar/MenuBar'
+import { mainItems } from '../MenuBar/MenuBar'
 import Divider from '@material-ui/core/Divider';
 import List from '@material-ui/core/List';
-
-
+import firebase from '../../firebase'
 
 function MadeWithLove() {
   return (
@@ -111,7 +109,14 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const LoggedLayout = props => {
+function LoggedLayout (props) {
+
+
+	if(!firebase.getCurrentUsername()) {
+		console.error('Please login first')
+		props.history.replace('/login')
+		return null
+	}
 
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
@@ -124,7 +129,6 @@ const LoggedLayout = props => {
 
   return (
     <div className={classes.root}>
-      <CssBaseline />
       <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
         <Toolbar className={classes.toolbar}>
           <IconButton
@@ -156,7 +160,6 @@ const LoggedLayout = props => {
             <ChevronLeftIcon />
           </IconButton>
         </div>
-
         <Divider />
         <List>{mainItems}</List>
       </Drawer>

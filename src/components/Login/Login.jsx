@@ -1,42 +1,18 @@
-import React, { Component } from 'react'
-import { connect } from "react-redux"
-import { bindActionCreators } from 'redux'
-import {
-  login
-} from '../../actions/loginActions'
-import Avatar from '@material-ui/core/Avatar';
-import CssBaseline from '@material-ui/core/CssBaseline';
+import React from 'react'
+import { Container, Typography, Avatar } from '@material-ui/core'
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
+import { withRouter } from 'react-router-dom'
+import firebase from '../../firebase'
+import UnloggedLayout from '../DefaultLayout/UnloggedLayout';
 import Grid from '@material-ui/core/Grid';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
 import Logo from '../Logo/Logo';
 import LoginForm from './LoginForm';
 import styles from './Login.scss'
 
-
-
-class Login extends Component {
-  constructor (props) {
-    super(props)
-
-    this.submit = this.submit.bind(this)
-  }
-
-  submit = values => {
-    const {
-      login
-    } = this.props
-
-    login(values)
-  }
-
-  render() {
-    
-    return (
+function SignIn(props) {
+	return (
+		<UnloggedLayout>
       <Container component="main" maxWidth="xs">
-        <CssBaseline />
         <div className={styles.paper}>
           <Avatar className={styles.avatar}>
             <LockOutlinedIcon />
@@ -45,7 +21,7 @@ class Login extends Component {
             Dashboard
           </Typography>
           <LoginForm
-            onSubmit={this.submit}
+            onSubmit={login}
           />
           <br/>
           <Grid container>
@@ -55,17 +31,17 @@ class Login extends Component {
           </Grid>
         </div>
       </Container>
-    )
-  }
+		</UnloggedLayout>		
+	)
+
+	async function login(user) {
+		try {
+			await firebase.login(user.email, user.password)
+			props.history.replace('/')
+		} catch(error) {
+			alert(error.message)
+		}
+	}
 }
 
-const mapStateToProps = state => ({
-  ...state
-})
-
-const mapDispatchToProps = dispatch => bindActionCreators({
-  login
-}, dispatch)
-
-
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default withRouter(SignIn)
