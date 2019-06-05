@@ -5,6 +5,10 @@ import Login from '../Login/Login'
 import Calculator from '../Calculator/Calculator'
 import Register from '../Register/Register'
 import HomePage from '../HomePage/HomePage'
+import ClientsList from '../Clients/ClientsList';
+import ClientsCreate from '../Clients/ClientsCreate';
+import ClientsListItem from '../Clients/ClientsListItem';
+import ClientsEdit from '../Clients/ClientsEdit';
 
 class Routes extends Component {
   render() {
@@ -16,6 +20,10 @@ class Routes extends Component {
             <Route exact path="/login" component={Login} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/calculadora" component={Calculator} />
+            <Route path='/clientes/edit/:id' component={ClientsEdit} />
+            <Route path='/clientes/novo' component={ClientsCreate} />
+            <Route path='/clientes/:id' component={ClientsListItem} />
+            <Route path='/clientes' component={ClientsList} />
             <Route exact path="/*" component={Login} />
           </Switch>
         </ScrollToTop>

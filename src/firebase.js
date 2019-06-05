@@ -10,14 +10,16 @@ const config = {
   storageBucket: "affable-armor-148018.appspot.com",
   messagingSenderId: "892120156709",
   appId: "1:892120156709:web:a5d36771a72843c1"
-};
+}
 
+const settings = {}
 
 class Firebase {
 	constructor() {
 		app.initializeApp(config)
 		this.auth = app.auth()
 		this.db = app.firestore()
+		this.db.settings(settings)
 	}
 
 	login(email, password) {
@@ -60,5 +62,6 @@ class Firebase {
 		return quote.get('quote')
 	}
 }
+
 
 export default new Firebase()
