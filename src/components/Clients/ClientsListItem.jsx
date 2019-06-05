@@ -29,7 +29,7 @@ class ClientsListItem extends Component {
   delete(id){
     firebase.firestore().collection('boards').doc(id).delete().then(() => {
       console.log("Document successfully deleted!");
-      this.props.history.push("/")
+      this.props.history.push("/clientes")
     }).catch((error) => {
       console.error("Error removing document: ", error);
     });
@@ -40,7 +40,7 @@ class ClientsListItem extends Component {
       <div className="container">
         <div className="panel panel-default">
           <div className="panel-heading">
-          <h4><Link to="/">Board List</Link></h4>
+          <h4><Link to="/clientes">Board List</Link></h4>
             <h3 className="panel-title">
               {this.state.board.title}
             </h3>
@@ -52,7 +52,7 @@ class ClientsListItem extends Component {
               <dt>Author:</dt>
               <dd>{this.state.board.author}</dd>
             </dl>
-            <Link to={`/edit/${this.state.key}`} className="btn btn-success">Edit</Link>&nbsp;
+            <Link to={`/clientes/edit/${this.state.key}`} className="btn btn-success">Edit</Link>&nbsp;
             <button onClick={this.delete.bind(this, this.state.key)} className="btn btn-danger">Delete</button>
           </div>
         </div>

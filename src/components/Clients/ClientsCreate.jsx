@@ -34,7 +34,7 @@ class ClientsCreate extends Component {
         description: '',
         author: ''
       });
-      this.props.history.push("/")
+      this.props.history.push("/clientes")
     })
     .catch((error) => {
       console.error("Error adding document: ", error);
@@ -52,7 +52,7 @@ class ClientsCreate extends Component {
             </h3>
           </div>
           <div className="panel-body">
-            <h4><Link to="/" className="btn btn-primary">Book List</Link></h4>
+            <h4><Link to="/clientes" className="btn btn-primary">Book List</Link></h4>
             <form onSubmit={this.onSubmit}>
               <div className="form-group">
                 <label for="title">Title:</label>
