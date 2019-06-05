@@ -1,6 +1,7 @@
-import React, { Component } from 'react';
-import firebase from '../../firebase';
-import { Link } from 'react-router-dom';
+import React, { Component } from 'react'
+import firebase from '../../firebase'
+import { Link } from 'react-router-dom'
+import ClientsForm from './ClientsForm'
 
 class ClientsCreate extends Component {
 
@@ -53,21 +54,7 @@ class ClientsCreate extends Component {
           </div>
           <div className="panel-body">
             <h4><Link to="/clientes" className="btn btn-primary">Book List</Link></h4>
-            <form onSubmit={this.onSubmit}>
-              <div className="form-group">
-                <label for="title">Title:</label>
-                <input type="text" className="form-control" name="title" value={title} onChange={this.onChange} placeholder="Title" />
-              </div>
-              <div className="form-group">
-                <label for="description">Description:</label>
-                <textArea className="form-control" name="description" onChange={this.onChange} placeholder="Description" cols="80" rows="3">{description}</textArea>
-              </div>
-              <div className="form-group">
-                <label for="author">Author:</label>
-                <input type="text" className="form-control" name="author" value={author} onChange={this.onChange} placeholder="Author" />
-              </div>
-              <button type="submit" className="btn btn-success">Submit</button>
-            </form>
+            <ClientsForm onSubmit={this.onSubmit}/>
           </div>
         </div>
       </div>

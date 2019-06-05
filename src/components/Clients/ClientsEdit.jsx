@@ -1,6 +1,7 @@
-import React, { Component } from 'react';
-import firebase from '../../firebase';
-import { Link } from 'react-router-dom';
+import React, { Component } from 'react'
+import firebase from '../../firebase'
+import { Link } from 'react-router-dom'
+import ClientsForm from './ClientsForm'
 
 class ClientsEdit extends Component {
 
@@ -8,57 +9,68 @@ class ClientsEdit extends Component {
     super(props);
     this.state = {
       key: '',
-      title: '',
-      description: '',
-      author: ''
-    };
+      name: '',
+      email: '',
+      phone: ''
+    }
   }
 
   componentDidMount() {
-    const ref = firebase.db.collection('boards').doc(this.props.match.params.id);
+    const ref = firebase.db.collection('clients').doc(this.props.match.params.id)
+
     ref.get().then((doc) => {
       if (doc.exists) {
-        const board = doc.data();
+        const clients = doc.data()
+
         this.setState({
           key: doc.id,
-          title: board.title,
-          description: board.description,
-          author: board.author
+          name: clients.name,
+          email: clients.email,
+          phone: clients.phone
         });
       } else {
-        console.log("No such document!");
+        console.log("No such document!")
       }
-    });
+    })
   }
 
   onChange = (e) => {
     const state = this.state
-    state[e.target.name] = e.target.value;
-    this.setState({board:state});
+
+    state[e.target.name] = e.target.value
+    
+    this.setState({
+      client: state
+    })
   }
 
   onSubmit = (e) => {
     e.preventDefault();
 
-    const { title, description, author } = this.state;
+    const { name, email, phone } = this.state;
 
-    const updateRef = firebase.db.collection('boards').doc(this.state.key);
+    const updateRef = firebase
+      .db
+      .collection('clients')
+      .doc(this.state.key)
+
     updateRef.set({
-      title,
-      description,
-      author
-    }).then((docRef) => {
+      name,
+      email,
+      phone
+    })
+    .then(docRef => {
       this.setState({
         key: '',
-        title: '',
-        description: '',
-        author: ''
-      });
+        name: '',
+        email: '',
+        phone: ''
+      })
       this.props.history.push("/clientes/"+this.props.match.params.id)
     })
     .catch((error) => {
-      console.error("Error adding document: ", error);
-    });
+      console.error("Error adding document: ", error)
+    })
   }
 
   render() {
@@ -72,21 +84,7 @@ class ClientsEdit extends Component {
           </div>
           <div class="panel-body">
             <h4><Link to={`/clientes/${this.state.key}`} class="btn btn-primary">Board List</Link></h4>
-            <form onSubmit={this.onSubmit}>
-              <div class="form-group">
-                <label for="title">Title:</label>
-                <input type="text" class="form-control" name="title" value={this.state.title} onChange={this.onChange} placeholder="Title" />
-              </div>
-              <div class="form-group">
-                <label for="description">Description:</label>
-                <input type="text" class="form-control" name="description" value={this.state.description} onChange={this.onChange} placeholder="Description" />
-              </div>
-              <div class="form-group">
-                <label for="author">Author:</label>
-                <input type="text" class="form-control" name="author" value={this.state.author} onChange={this.onChange} placeholder="Author" />
-              </div>
-              <button type="submit" class="btn btn-success">Submit</button>
-            </form>
+            <ClientsForm onSubmit={this.onSubmit} item={this.state}/>
           </div>
         </div>
       </div>
