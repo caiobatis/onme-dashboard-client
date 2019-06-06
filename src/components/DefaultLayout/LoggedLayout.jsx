@@ -315,6 +315,7 @@ function LoggedLayout (props) {
           </Grid>
         </Container>
         <MadeWithLove />
+        <br/>
       </main>
     </div>
   )
