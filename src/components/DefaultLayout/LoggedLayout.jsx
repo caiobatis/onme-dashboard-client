@@ -1,4 +1,9 @@
 import React from 'react'
+import { connect } from "react-redux"
+import { bindActionCreators } from 'redux'
+import {
+  receiveSearch
+} from '../../actions/commonsActions'
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -10,11 +15,9 @@ import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import Logo from '../Logo/Logo'
 import { mainItems } from '../MenuBar/MenuBar'
 import Divider from '@material-ui/core/Divider';
 import List from '@material-ui/core/List';
-
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import InputBase from '@material-ui/core/InputBase';
@@ -24,9 +27,6 @@ import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
-import MoreIcon from '@material-ui/icons/MoreVert'
-
-
 import firebase from '../../firebase'
 
 function MadeWithLove() {
@@ -68,14 +68,8 @@ const useStyles = makeStyles(theme => ({
       duration: theme.transitions.duration.enteringScreen,
     }),
   },
-  menuButton: {
-    marginRight: 36,
-  },
   menuButtonHidden: {
     display: 'none',
-  },
-  title: {
-    flexGrow: 1,
   },
   drawerPaper: {
     position: 'relative',
@@ -175,11 +169,9 @@ const useStyles = makeStyles(theme => ({
       display: 'none',
     },
   },
-}));
+}))
 
 function LoggedLayout (props) {
-
-
 	if(!firebase.getCurrentUsername()) {
 		props.history.replace('/login')
 		return null
@@ -194,27 +186,21 @@ function LoggedLayout (props) {
     setOpen(false);
   }
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
   const isMenuOpen = Boolean(anchorEl);
-  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
   function handleProfileMenuOpen(event) {
     setAnchorEl(event.currentTarget);
   }
 
-  function handleMobileMenuClose() {
-    setMobileMoreAnchorEl(null);
-  }
-
   function handleMenuClose() {
     setAnchorEl(null);
-    handleMobileMenuClose();
+  }
+  
+  function handleSearch(e) {
+    props.receiveSearch(e.target.value)
   }
 
-  function handleMobileMenuOpen(event) {
-    setMobileMoreAnchorEl(event.currentTarget);
-  }
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
     <Menu
@@ -229,8 +215,7 @@ function LoggedLayout (props) {
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
     </Menu>
-  );
-
+  )
 
   return (
     <div className={classes.root}>
@@ -255,6 +240,7 @@ function LoggedLayout (props) {
                 <SearchIcon />
               </div>
               <InputBase
+                onChange={handleSearch}
                 placeholder="Search…"
                 classes={{
                   root: classes.inputRoot,
@@ -321,4 +307,9 @@ function LoggedLayout (props) {
   )
 }
 
-export default LoggedLayout
+const mapDispatchToProps = dispatch => bindActionCreators({
+  receiveSearch
+}, dispatch)
+
+
+export default connect(null, mapDispatchToProps)(LoggedLayout);

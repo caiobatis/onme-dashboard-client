@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
+import { connect } from "react-redux"
 import {
 	Home as HomeIcon,
 	Whatshot as WhatshotIcon
@@ -14,35 +15,12 @@ import {
 	MenuItem,
 	Link
 } from '@material-ui/core'
-import withStyles from '@material-ui/core/styles/withStyles'
-import firebase from '../../firebase'
-import { withRouter } from 'react-router-dom'
 import LoggedLayout from '../DefaultLayout/LoggedLayout'
 import CalculatorFair from './CalculatorFair'
-
-const styles = theme => ({
-	main: {
-		width: 'auto',
-		display: 'block',
-		marginLeft: theme.spacing(3),
-		marginRight: theme.spacing(3),
-		[theme.breakpoints.up(400 + theme.spacing(3 * 2))]: {
-			width: "100%",
-			marginLeft: 'auto',
-			marginRight: 'auto',
-		},
-	},
-	paper: {
-		padding: `${theme.spacing(2)}px 0`,
-	},
-	formControl: {
-		minWidth: 200,
-	},
-})
+import styles from './Calculator.scss'
 
 function Calculator(props) {
-	const { classes } = props
-
+	
 	const [calculator, setCalculator] = useState({
     value: 'fair'
 	})
@@ -53,36 +31,39 @@ function Calculator(props) {
 		})
 	}
 	
-	let content = calculator.value === 'fair' ? <CalculatorFair/> : <div className="a"></div>
+	let content = calculator.value === 'fair' ? 
+	<CalculatorFair
+		search={props.search}
+	/> : <div className="a"></div>
 
 	return (
 		<LoggedLayout 
 			title='Calculadora'
 			search={true}
 		>
-			<main className={classes.main}>
+			<main className={styles.main}>
 				<Grid item xs={6}>
 					<Breadcrumbs aria-label="Breadcrumb">
-						<Link color="inherit" href="/" className={classes.link}>
-							<HomeIcon className={classes.icon} />
+						<Link color="inherit" href="/" className={styles.link}>
+							<HomeIcon className={styles.icon} />
 							Inicio
 						</Link>
 						<Link
 							color="inherit"
 							href="/"
-							className={classes.link}
+							className={styles.link}
 						>
-							<WhatshotIcon className={classes.icon} />
+							<WhatshotIcon className={styles.icon} />
 							Calculadora
 						</Link>
-						<Typography color="textPrimary" className={classes.link}>
-							Fair
+						<Typography color="textPrimary" className={styles.link}>
+							{calculator.value.toUpperCase()}
 						</Typography>
 					</Breadcrumbs>
 				</Grid>
 				<div style={{padding: "20px 0"}}>
 					<Grid item xs={12}>
-						<FormControl variant="outlined" className={classes.formControl}>
+						<FormControl variant="outlined" className={styles.formControl}>
 							<InputLabel htmlFor="outlined-age-simple">
 								Calculadora
 							</InputLabel>
@@ -104,4 +85,9 @@ function Calculator(props) {
 	)
 }
 
-export default withRouter(withStyles(styles)(Calculator))
+const mapStateToProps = state => ({
+	...state,
+	search: state.commonsReducer.search
+})
+
+export default connect(mapStateToProps)(Calculator)

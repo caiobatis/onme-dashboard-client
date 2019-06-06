@@ -1,0 +1,1 @@
+export const RECEIVE_SEARCH = 'RECEIVE_SEARCH'

@@ -36,7 +36,6 @@ class Contact extends Component {
   }
 }
 
-
 const mapStateToProps = state => ({
   ...state
 })
