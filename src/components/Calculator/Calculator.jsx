@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { connect } from "react-redux"
+import { bindActionCreators } from 'redux'
 import {
 	Home as HomeIcon,
 	Whatshot as WhatshotIcon
@@ -15,6 +16,7 @@ import {
 	MenuItem,
 	Link
 } from '@material-ui/core'
+import { getCalculatorFair } from '../../actions/calculatorActions'
 import LoggedLayout from '../DefaultLayout/LoggedLayout'
 import CalculatorFair from './CalculatorFair'
 import styles from './Calculator.scss'
@@ -30,11 +32,18 @@ function Calculator(props) {
       value: event.target.value,
 		})
 	}
+	useEffect(() => {
+		props.getCalculatorFair()
+  })
 	
-	let content = calculator.value === 'fair' ? 
-	<CalculatorFair
-		search={props.search}
-	/> : <div className="a"></div>
+	let content = 
+		calculator.value === 'fair' ?
+		<CalculatorFair
+			search={props.search}
+		/> : 
+		<div className="a">
+			calculadora frente
+		</div>
 
 	return (
 		<LoggedLayout 
@@ -90,4 +99,8 @@ const mapStateToProps = state => ({
 	search: state.commonsReducer.search
 })
 
-export default connect(mapStateToProps)(Calculator)
+const mapDispatchToProps = dispatch => bindActionCreators({
+  getCalculatorFair
+}, dispatch)
+
+export default connect(mapStateToProps, mapDispatchToProps)(Calculator)
