@@ -14,7 +14,8 @@ import {
 	Select,
 	FormControl,
 	MenuItem,
-	Link
+	Link,
+	Button
 } from '@material-ui/core'
 import { getCalculatorFair } from '../../actions/calculatorActions'
 import LoggedLayout from '../DefaultLayout/LoggedLayout'
@@ -22,6 +23,11 @@ import CalculatorFair from './CalculatorFair'
 import styles from './Calculator.scss'
 
 function Calculator(props) {
+
+	const {
+		fair,
+		search
+	} = props
 	
 	const [calculator, setCalculator] = useState({
     value: 'fair'
@@ -32,14 +38,28 @@ function Calculator(props) {
       value: event.target.value,
 		})
 	}
+
+	function updateCoins() {
+		const {
+			getCalculatorFair
+		} = props
+	
+		calculator.value === 'fair' && getCalculatorFair()
+	}
+
 	useEffect(() => {
-		props.getCalculatorFair()
-  })
+		const {
+			getCalculatorFair
+		} = props
+
+		getCalculatorFair()
+  }, [])
 	
 	let content = 
 		calculator.value === 'fair' ?
 		<CalculatorFair
-			search={props.search}
+			search={search}
+			coins={fair.content}
 		/> : 
 		<div className="a">
 			calculadora frente
@@ -71,7 +91,8 @@ function Calculator(props) {
 					</Breadcrumbs>
 				</Grid>
 				<div style={{padding: "20px 0"}}>
-					<Grid item xs={12}>
+					<Grid container>
+					<Grid item xs={8}>
 						<FormControl variant="outlined" className={styles.formControl}>
 							<InputLabel htmlFor="outlined-age-simple">
 								Calculadora
@@ -86,6 +107,17 @@ function Calculator(props) {
 							</Select>
 						</FormControl>
 					</Grid>
+					<Grid item xs={4}>
+						<div className={styles.alignRigth}>
+							<Button 
+								onClick={updateCoins}
+								className={styles.secundary}
+							>
+								Atualizar
+							</Button>
+						</div>
+					</Grid>
+					</Grid>
 
 				</div>
 				{ content }
@@ -96,7 +128,8 @@ function Calculator(props) {
 
 const mapStateToProps = state => ({
 	...state,
-	search: state.commonsReducer.search
+	search: state.commonsReducer.search,
+	fair: state.calculatorReducer.fair
 })
 
 const mapDispatchToProps = dispatch => bindActionCreators({

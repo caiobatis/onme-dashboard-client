@@ -29,6 +29,8 @@ import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import firebase from '../../firebase'
 
+import CircularProgress from '@material-ui/core/CircularProgress';
+
 function MadeWithLove() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
@@ -169,6 +171,16 @@ const useStyles = makeStyles(theme => ({
       display: 'none',
     },
   },
+  loading: {
+    position: 'fixed',
+    display: 'flex',
+    alignItems: 'center',
+    zIndex: 1300,
+    background: 'rgba(255, 255, 255, 0.5)',
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center'
+  }
 }))
 
 function LoggedLayout (props) {
@@ -219,6 +231,9 @@ function LoggedLayout (props) {
 
   return (
     <div className={classes.root}>
+      <div className={classes.loading}>
+        <CircularProgress size={30}/>
+      </div>
       <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
         <Toolbar className={classes.toolbar}>
           <IconButton
@@ -311,5 +326,10 @@ const mapDispatchToProps = dispatch => bindActionCreators({
   receiveSearch
 }, dispatch)
 
+const mapStateToProps = state => ({
+	...state,
+	loading: state.commonsReducer.loader
+})
 
-export default connect(null, mapDispatchToProps)(LoggedLayout);
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoggedLayout);

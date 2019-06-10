@@ -1,9 +1,12 @@
 import {
-  RECEIVE_SEARCH
+  RECEIVE_SEARCH, FETCH_COMMON
 } from '../lib/actionsTypes'
 
 const initialState = {
-  search: ''
+  search: '',
+  loading: {
+    fetch: false
+  }
 }
 
 export default (state = initialState, action) => {
@@ -11,7 +14,14 @@ export default (state = initialState, action) => {
     case RECEIVE_SEARCH:
       return {
         search: action.payload
-      };
+      }
+      case FETCH_COMMON:
+        return {
+          loading: {
+            fetch: action.payload
+          } 
+        }
+
     default:
       return state;
   }

@@ -25,6 +25,13 @@ export const calculatorFairResource = () => {
       .catch((res) => reject(res)))
 }
 
+export const calculatorFrenteResource = (city = 'WL-ONME-SP') => {
+  return new Promise((resolve, reject) => 
+    axios.get(`https://api.frentecorretora.com.br/v1/exchanges/products/${city}`)
+      .then((res) => resolve(res))
+      .catch((res) => reject(res)))
+}
+
 // export const registerResource = values => {
 //   const {
 //     name, email, password
