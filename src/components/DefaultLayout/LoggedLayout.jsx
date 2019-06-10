@@ -228,12 +228,16 @@ function LoggedLayout (props) {
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
     </Menu>
   )
-
+  
   return (
     <div className={classes.root}>
-      <div className={classes.loading}>
-        <CircularProgress size={30}/>
-      </div>
+      {
+        props.loading && (
+          <div className={classes.loading}>
+            <CircularProgress size={30}/>
+          </div>
+        )
+      }
       <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
         <Toolbar className={classes.toolbar}>
           <IconButton
@@ -328,7 +332,7 @@ const mapDispatchToProps = dispatch => bindActionCreators({
 
 const mapStateToProps = state => ({
 	...state,
-	loading: state.commonsReducer.loader
+	loading: state.commonsReducer.loading.fetch
 })
 
 
