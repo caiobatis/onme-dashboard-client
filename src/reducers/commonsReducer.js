@@ -15,12 +15,12 @@ export default (state = initialState, action) => {
       return {
         search: action.payload
       }
-      case FETCH_COMMON:
-        return {
-          loading: {
-            fetch: action.payload
-          } 
-        }
+    case FETCH_COMMON:
+      return {
+        loading: {
+          fetch: action.payload
+        } 
+      }
 
     default:
       return state;

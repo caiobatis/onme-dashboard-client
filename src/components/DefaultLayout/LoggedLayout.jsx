@@ -232,7 +232,7 @@ function LoggedLayout (props) {
   return (
     <div className={classes.root}>
       {
-        props.loading && (
+        props.loading && props.loading.fetch && (
           <div className={classes.loading}>
             <CircularProgress size={30}/>
           </div>
@@ -332,7 +332,7 @@ const mapDispatchToProps = dispatch => bindActionCreators({
 
 const mapStateToProps = state => ({
 	...state,
-	loading: state.commonsReducer.loading.fetch
+	loading: state.commonsReducer.loading
 })
 
 
