@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react'
 import { connect } from "react-redux"
 import { bindActionCreators } from 'redux'
 import {
-  receiveSearch
+  receiveSearch,
+  setProfileUser,
+  getUserProfile
 } from '../../actions/commonsActions'
 import clsx from 'clsx'
 import { makeStyles } from '@material-ui/core/styles'
@@ -37,7 +39,7 @@ function MadeWithLove() {
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © 2019 - Todos os Direitos Reservados.'}
     </Typography>
-  );
+  )
 }
 
 const drawerWidth = 240;
@@ -185,32 +187,31 @@ const useStyles = makeStyles(theme => ({
 }))
 
 function LoggedLayout (props) {
+
+  const {
+    profile,
+    history,
+    receiveSearch,
+    loading,
+    search,
+    title
+  } = props
+
   const classes = useStyles()
   const [name] = useState(firebase.getCurrentUsername())
-  const [storage] = useState(firebase.storage)
-  const [profile, setProfile] = useState({})
-  const [avatar, setAvatar] = useState('')
   const [open, setOpen] = useState(true)
   
 	if(!name) {
-		props.history.replace('/login')
+		history.replace('/login')
 		return null
 	}
 
-  async function getUserProfile() {
-    try {
-      await firebase.getCurrentUser()
-      .then((res)=> setProfile(res))
-    } catch(error) {
-      alert(error.message)
-    }
-  }
-
-
   useEffect(()=> {
-    getUserProfile()
+    props.getUserProfile({
+      name
+    })
   }, [])
-
+  
   const handleDrawerOpen = () => {
     setOpen(true);
   }
@@ -232,7 +233,7 @@ function LoggedLayout (props) {
   }
   
   function handleSearch(e) {
-    props.receiveSearch(e.target.value)
+    receiveSearch(e.target.value)
   }
   
   const menuId = 'primary-search-account-menu'
@@ -252,21 +253,10 @@ function LoggedLayout (props) {
     </Menu>
   )
 
-  if(profile.avatar) {  
-    var pathReference = storage.ref(profile.avatar);
-  
-    pathReference.getDownloadURL().then((url) => {
-      setAvatar(url)
-    })
-  }
-
-  // Create a reference from a Google Cloud Storage URI
-  // var gsReference = storage.refFromURL('gs://bucket/images/stars.jpg')
-
   return (
     <div className={classes.root}>
       {
-        props.loading && props.loading.fetch && (
+        loading && loading.fetch && (
           <div className={classes.loading}>
             <CircularProgress size={30}/>
           </div>
@@ -284,10 +274,10 @@ function LoggedLayout (props) {
             <MenuIcon />
           </IconButton>
           <Typography className={classes.title} variant="h6" noWrap>
-            {props.title} 
+            {title} 
           </Typography>
           {
-            props.search && (
+            search && (
             <div className={classes.search}>
               <div className={classes.searchIcon}>
                 <SearchIcon />
@@ -324,8 +314,7 @@ function LoggedLayout (props) {
               onClick={handleProfileMenuOpen}
               color="inherit"
             >
-              <AccountCircle />
-              <Avatar alt={name} src={avatar} />              
+              { profile.avatar ? <Avatar alt={profile.name} src={profile.avatar} /> : <AccountCircle /> }
             </IconButton>
           </div>
         </Toolbar>
@@ -362,12 +351,13 @@ function LoggedLayout (props) {
 }
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  receiveSearch
+  receiveSearch,
+  getUserProfile
 }, dispatch)
 
 const mapStateToProps = state => ({
-	...state,
-	loading: state.commonsReducer.loading
+  loading: state.commonsReducer.loading,
+  profile: state.commonsReducer.profile || {}
 })
 
 

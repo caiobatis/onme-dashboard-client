@@ -30,7 +30,6 @@ function Calculator(props) {
 		frente,
 		search
 	} = props
-	console.log(frente)
 	
 	const [calculator, setCalculator] = useState({
     value: 'fair'
@@ -184,7 +183,6 @@ function Calculator(props) {
 }
 
 const mapStateToProps = state => ({
-	...state,
 	search: state.commonsReducer.search,
 	fair: state.calculatorReducer.fair,
 	frente: state.calculatorReducer.frente
