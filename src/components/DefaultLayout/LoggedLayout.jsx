@@ -1,32 +1,33 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { connect } from "react-redux"
 import { bindActionCreators } from 'redux'
 import {
   receiveSearch
 } from '../../actions/commonsActions'
-import clsx from 'clsx';
-import { makeStyles } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import clsx from 'clsx'
+import { makeStyles } from '@material-ui/core/styles'
+import Drawer from '@material-ui/core/Drawer'
+import AppBar from '@material-ui/core/AppBar'
+import Toolbar from '@material-ui/core/Toolbar'
+import Typography from '@material-ui/core/Typography'
+import IconButton from '@material-ui/core/IconButton'
+import Container from '@material-ui/core/Container'
+import Grid from '@material-ui/core/Grid'
+import MenuIcon from '@material-ui/icons/Menu'
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
 import { mainItems } from '../MenuBar/MenuBar'
-import Divider from '@material-ui/core/Divider';
-import List from '@material-ui/core/List';
-import MenuItem from '@material-ui/core/MenuItem';
-import Menu from '@material-ui/core/Menu';
-import InputBase from '@material-ui/core/InputBase';
-import Badge from '@material-ui/core/Badge';
-import { fade } from '@material-ui/core/styles/colorManipulator';
-import SearchIcon from '@material-ui/icons/Search';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-import MailIcon from '@material-ui/icons/Mail';
-import NotificationsIcon from '@material-ui/icons/Notifications';
+import Divider from '@material-ui/core/Divider'
+import List from '@material-ui/core/List'
+import MenuItem from '@material-ui/core/MenuItem'
+import Menu from '@material-ui/core/Menu'
+import InputBase from '@material-ui/core/InputBase'
+import Badge from '@material-ui/core/Badge'
+import { fade } from '@material-ui/core/styles/colorManipulator'
+import SearchIcon from '@material-ui/icons/Search'
+import AccountCircle from '@material-ui/icons/AccountCircle'
+import MailIcon from '@material-ui/icons/Mail'
+import NotificationsIcon from '@material-ui/icons/Notifications'
+import Avatar from '@material-ui/core/Avatar'
 import firebase from '../../firebase'
 
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -184,19 +185,40 @@ const useStyles = makeStyles(theme => ({
 }))
 
 function LoggedLayout (props) {
-	if(!firebase.getCurrentUsername()) {
+  const classes = useStyles()
+  const [name] = useState(firebase.getCurrentUsername())
+  const [storage] = useState(firebase.storage)
+  const [profile, setProfile] = useState({})
+  const [avatar, setAvatar] = useState('')
+  const [open, setOpen] = useState(true)
+  
+	if(!name) {
 		props.history.replace('/login')
 		return null
 	}
 
-  const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
+  async function getUserProfile() {
+    try {
+      await firebase.getCurrentUser()
+      .then((res)=> setProfile(res))
+    } catch(error) {
+      alert(error.message)
+    }
+  }
+
+
+  useEffect(()=> {
+    getUserProfile()
+  }, [])
+
   const handleDrawerOpen = () => {
     setOpen(true);
-  };
+  }
+
   const handleDrawerClose = () => {
     setOpen(false);
   }
+
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const isMenuOpen = Boolean(anchorEl);
@@ -212,8 +234,9 @@ function LoggedLayout (props) {
   function handleSearch(e) {
     props.receiveSearch(e.target.value)
   }
+  
+  const menuId = 'primary-search-account-menu'
 
-  const menuId = 'primary-search-account-menu';
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}
@@ -228,7 +251,18 @@ function LoggedLayout (props) {
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
     </Menu>
   )
+
+  if(profile.avatar) {  
+    var pathReference = storage.ref(profile.avatar);
   
+    pathReference.getDownloadURL().then((url) => {
+      setAvatar(url)
+    })
+  }
+
+  // Create a reference from a Google Cloud Storage URI
+  // var gsReference = storage.refFromURL('gs://bucket/images/stars.jpg')
+
   return (
     <div className={classes.root}>
       {
@@ -291,6 +325,7 @@ function LoggedLayout (props) {
               color="inherit"
             >
               <AccountCircle />
+              <Avatar alt={name} src={avatar} />              
             </IconButton>
           </div>
         </Toolbar>

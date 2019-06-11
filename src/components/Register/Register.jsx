@@ -55,11 +55,39 @@ function Register(props) {
 	const [email, setEmail] = useState('')
 	const [access, setAccess] = useState('1')
 	const [password, setPassword] = useState('')
+	const [progress, setProgress] = useState(0)
+	const [avatar, setAvatar] = useState('')
+	const [avatarURL, setAvatarURL] = useState('')
+	const [isUploading, setIsUploading] = useState(false)
 
 
+	function handleUploadStart() {
+		setIsUploading(true)
+		setProgress(0)
+	}
 
-var storageRef = firebase.storage().ref();
-var mountainsRef = storageRef.child('mountains.jpg');
+  function handleProgress(progress) {
+		setProgress(progress)
+	}
+	
+  function handleUploadError(error) {
+		setIsUploading(false)
+	}
+	
+	function handleUploadSuccess(filename) {
+		setAvatar(filename)
+		setProgress(100)
+		setIsUploading(false)
+
+		firebase
+		.storage
+		.ref()
+		.child(filename)
+		.getDownloadURL()
+		.then(url => setAvatarURL(url))
+	}
+	
+	var storageRef = firebase.storage.ref('profile')
 
 	return (
 		<main className={classes.main}>
@@ -113,22 +141,19 @@ var mountainsRef = storageRef.child('mountains.jpg');
 					</FormControl>
 
 					<label>Avatar:</label>
-          {/* {this.state.isUploading && <p>Progress: {this.state.progress}</p>}
-          {this.state.avatarURL && <img src={this.state.avatarURL} />} */}
-          {/* <FileUploader
+          {isUploading && <p>Progress: {progress}</p>}
+          {avatarURL && <img src={avatarURL} />}
+          <FileUploader
             accept="image/*"
             name="avatar"
             randomizeFilename
-            storageRef={firebase.storage().ref()}
-            onUploadSuccess={(filename) => {
-							firebase
-							.storage
-							.ref("images")
-							.child(filename)
-							.getDownloadURL()
-							.then(url => console.log(url))
-						}}
-          /> */}
+            storageRef={storageRef}
+            onUploadSuccess={handleUploadSuccess}
+            onUploadStart={handleUploadStart}
+            onUploadError={handleUploadError}
+            onUploadSuccess={handleUploadSuccess}
+            onProgress={handleProgress}
+          />
 
 					<Button
 						type="submit"
@@ -138,7 +163,7 @@ var mountainsRef = storageRef.child('mountains.jpg');
 						onClick={onRegister}
 						className={classes.submit}>
 						Register
-          			</Button>
+					</Button>
 
 					<Button
 						type="submit"
@@ -149,7 +174,7 @@ var mountainsRef = storageRef.child('mountains.jpg');
 						to="/login"
 						className={classes.submit}>
 						Go back to Login
-          			</Button>
+					</Button>
 				</form>
 			</Paper>
 		</main>
@@ -157,8 +182,8 @@ var mountainsRef = storageRef.child('mountains.jpg');
 
 	async function onRegister() {
 		try {
-			await firebase.register(name, email, password)
-			// await firebase.addQuote(quote)
+			await firebase.register(name, email, password, 21, 'oliveira')
+			await firebase.addComplementsUser({ avatar, avatarURL, access })
 			props.history.replace('/')
 		} catch(error) {
 			alert(error.message)

@@ -1,6 +1,7 @@
 import app from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/firebase-firestore'
+import 'firebase/storage'
 
 const config = {
   apiKey: "AIzaSyDnU14UbTMS_8Ba9yVFz9tPH1hF2f7tCm4",
@@ -19,7 +20,8 @@ class Firebase {
 		app.initializeApp(config)
 		this.auth = app.auth()
 		this.db = app.firestore()
-		
+		this.storage = app.storage()
+
 		this.db.settings(settings)
 	}
 
@@ -38,13 +40,20 @@ class Firebase {
 		})
 	}
 
-	addQuote(quote) {
+	addComplementsUser(data) {
 		if(!this.auth.currentUser) {
 			return alert('Not authorized')
 		}
+		console.log(data, this.auth.currentUser)
 
-		return this.db.doc(`users_codedamn_video/${this.auth.currentUser.uid}`).set({
-			quote
+		return this.db
+		.doc(`users/${this.auth.currentUser.uid}`)
+		.set(data)
+		.then(function() {
+			console.log("Document successfully written!");
+		})
+		.catch(function(error) {
+			console.error("Error writing document: ", error);
 		})
 	}
 
@@ -58,9 +67,12 @@ class Firebase {
 		return this.auth.currentUser && this.auth.currentUser.displayName
 	}
 
-	async getCurrentUserQuote() {
-		const quote = await this.db.doc(`users_codedamn_video/${this.auth.currentUser.uid}`).get()
-		return quote.get('quote')
+	async getCurrentUser() {
+		const client = await this.db.doc(`users/${this.auth.currentUser.uid}`).get()
+		return {
+			avatar: client.get('avatar'),
+			access: client.get('access')
+		}
 	}
 }
 
