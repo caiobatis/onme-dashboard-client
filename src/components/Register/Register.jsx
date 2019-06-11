@@ -1,5 +1,15 @@
 import React, { useState } from 'react'
 import { Typography, Paper, Avatar, Button, FormControl, Input, InputLabel } from '@material-ui/core'
+
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormLabel from '@material-ui/core/FormLabel';
+
+
+import FileUploader from "react-firebase-file-uploader";
+
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import withStyles from '@material-ui/core/styles/withStyles'
 import { Link, withRouter } from 'react-router-dom'
@@ -9,40 +19,47 @@ const styles = theme => ({
 	main: {
 		width: 'auto',
 		display: 'block', // Fix IE 11 issue.
-		marginLeft: theme.spacing.unit * 3,
-		marginRight: theme.spacing.unit * 3,
-		[theme.breakpoints.up(400 + theme.spacing.unit * 3 * 2)]: {
+		marginLeft: theme.spacing(3),
+		marginRight: theme.spacing(3),
+		[theme.breakpoints.up(400 + theme.spacing(3 * 2))]: {
 			width: 400,
 			marginLeft: 'auto',
 			marginRight: 'auto',
 		},
 	},
 	paper: {
-		marginTop: theme.spacing.unit * 8,
+		marginTop: theme.spacing(8),
 		display: 'flex',
 		flexDirection: 'column',
 		alignItems: 'center',
-		padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme.spacing.unit * 3}px`,
+		padding: `${theme.spacing(2)}px ${theme.spacing(3)}px ${theme.spacing(3)}px`,
 	},
 	avatar: {
-		margin: theme.spacing.unit,
+		margin: theme.spacing(),
 		backgroundColor: theme.palette.secondary.main,
 	},
 	form: {
 		width: '100%', // Fix IE 11 issue.
-		marginTop: theme.spacing.unit,
+		marginTop: theme.spacing(),
 	},
 	submit: {
-		marginTop: theme.spacing.unit * 3,
+		marginTop: theme.spacing(3),
 	},
 })
 
 function Register(props) {
 	const { classes } = props
+	
 
 	const [name, setName] = useState('')
 	const [email, setEmail] = useState('')
+	const [access, setAccess] = useState('1')
 	const [password, setPassword] = useState('')
+
+
+
+var storageRef = firebase.storage().ref();
+var mountainsRef = storageRef.child('mountains.jpg');
 
 	return (
 		<main className={classes.main}>
@@ -55,17 +72,64 @@ function Register(props) {
 				</Typography>
 				<form className={classes.form} onSubmit={e => e.preventDefault() && false }>
 					<FormControl margin="normal" required fullWidth>
-						<InputLabel htmlFor="name">Name</InputLabel>
+						<InputLabel htmlFor="name">Nome</InputLabel>
 						<Input id="name" name="name" autoComplete="off" autoFocus value={name} onChange={e => setName(e.target.value)} />
 					</FormControl>
 					<FormControl margin="normal" required fullWidth>
-						<InputLabel htmlFor="email">Email Address</InputLabel>
+						<InputLabel htmlFor="email">E-mail</InputLabel>
 						<Input id="email" name="email" autoComplete="off" value={email} onChange={e => setEmail(e.target.value)}  />
 					</FormControl>
 					<FormControl margin="normal" required fullWidth>
-						<InputLabel htmlFor="password">Password</InputLabel>
+						<InputLabel htmlFor="password">Senha</InputLabel>
 						<Input name="password" type="password" id="password" autoComplete="off" value={password} onChange={e => setPassword(e.target.value)}  />
 					</FormControl>
+					<FormControl component="fieldset" className={classes.formControl}>
+					<FormLabel component="legend">Nivel de acesso</FormLabel>
+						<RadioGroup
+							aria-label="gender"
+							name="gender2"
+							value={access}
+							onChange={(e)=> setAccess(e.target.value)}
+						>
+							<FormControlLabel
+								value='1'
+								control={<Radio color="primary" />}
+								label="Nivel 1"
+								labelPlacement="start"
+							/>
+							<FormControlLabel
+								value='2'
+								control={<Radio color="primary" />}
+								label="Nivel 2"
+								labelPlacement="start"
+							/>
+							<FormControlLabel
+								value='3'
+								control={<Radio color="primary" />}
+								label="Nivel 3"
+								labelPlacement="start"
+							/>
+						</RadioGroup>
+					</FormControl>
+
+					<label>Avatar:</label>
+          {/* {this.state.isUploading && <p>Progress: {this.state.progress}</p>}
+          {this.state.avatarURL && <img src={this.state.avatarURL} />} */}
+          {/* <FileUploader
+            accept="image/*"
+            name="avatar"
+            randomizeFilename
+            storageRef={firebase.storage().ref()}
+            onUploadSuccess={(filename) => {
+							firebase
+							.storage
+							.ref("images")
+							.child(filename)
+							.getDownloadURL()
+							.then(url => console.log(url))
+						}}
+          /> */}
+
 					<Button
 						type="submit"
 						fullWidth
