@@ -198,19 +198,16 @@ function LoggedLayout (props) {
   } = props
 
   const classes = useStyles()
-  const [name] = useState(firebase.getCurrentUsername())
+  const [_profile] = useState(firebase.getCurrentUser())
   const [open, setOpen] = useState(true)
   
-	if(!name) {
+	if(!_profile.name) {
 		history.replace('/login')
 		return null
 	}
 
   useEffect(()=> {
-    console.log(name)
-    props.getUserProfile({
-      name
-    })
+    props.getUserProfile()
   }, [])
   
   const handleDrawerOpen = () => {
@@ -257,7 +254,7 @@ function LoggedLayout (props) {
   return (
     <div className={classes.root}>
       {
-        loading && loading.fetch && (
+        props.loading && props.loading.fetch && (
           <div className={classes.loading}>
             <CircularProgress size={30}/>
           </div>
@@ -315,7 +312,7 @@ function LoggedLayout (props) {
               onClick={handleProfileMenuOpen}
               color="inherit"
             >
-              { profile.avatar ? <Avatar alt={profile.name} src={profile.avatar} /> : <AccountCircle /> }
+              { profile.photoURL ? <Avatar alt={profile.name} src={profile.photoURL} /> : <AccountCircle /> }
             </IconButton>
           </div>
         </Toolbar>
@@ -351,15 +348,16 @@ function LoggedLayout (props) {
   )
 }
 
+const mapStateToProps = state => ({
+  ...state,
+  loading: state.commonsReducer.loading,
+  profile: state.commonsReducer.profile || {}
+})
+
 const mapDispatchToProps = dispatch => bindActionCreators({
   receiveSearch,
   getUserProfile
 }, dispatch)
-
-const mapStateToProps = state => ({
-  loading: state.commonsReducer.loading,
-  profile: state.commonsReducer.profile || {}
-})
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoggedLayout);

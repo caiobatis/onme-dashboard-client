@@ -11,7 +11,7 @@ export const receiveSearch = (search) => ({
   payload: search
 })
 
-export const fetchCommon = data => ({
+export const fetchCommon = (data = false) => ({
   type: FETCH_COMMON,
   payload: data
 })
@@ -23,16 +23,9 @@ export const receiveProfileUser = data => ({
 
 export const getUserProfile = (user) => {
   return dispatch => {
-    firebase
-    .getCurrentUser()
-    .then((res) => {
-      dispatch(receiveProfileUser({
-        ...user,
-        ...res
-      }))
-    })
-    .catch((error)=> (
-      alert(error.message)
-    ))
+    const _user = firebase.getCurrentUser()
+    dispatch(receiveProfileUser({
+      ...user, ..._user
+    }))
   }
 }

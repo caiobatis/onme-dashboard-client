@@ -34,8 +34,6 @@ class Firebase {
 	}
 
 	async register(user) {
-		console.log(user.avatarURL, 'PHOTO' , user)
-
 		const auth = this.auth
 		await auth.createUserWithEmailAndPassword(user.email, user.password)
 		return auth.currentUser.updateProfile({
@@ -70,13 +68,12 @@ class Firebase {
 		return this.auth.currentUser && this.auth.currentUser.displayName
 	}
 
-	async getCurrentUser() {
-		// console.log(this.auth.currentUser)
-		const client = await this.auth.currentUser
+	getCurrentUser() {
+		const currentUser = this.auth.currentUser
 		return {
-			avatar: client.photoURL,
-			access: client.phoneNumber,
-			name: client.displayName
+			photoURL: currentUser.photoURL,
+			access: currentUser.phoneNumber,
+			name: currentUser.displayName
 		}
 	}
 }

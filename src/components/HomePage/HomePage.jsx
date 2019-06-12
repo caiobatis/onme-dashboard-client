@@ -10,11 +10,6 @@ function HomePage(props) {
 		profile
 	} = props
 
-	if(!firebase.getCurrentUsername()) {
-		props.history.replace('/login')
-		return null
-	}
-
 	return (
 		<LoggedLayout
 			title="Home"
