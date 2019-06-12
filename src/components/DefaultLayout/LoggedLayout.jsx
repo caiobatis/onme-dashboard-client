@@ -207,6 +207,7 @@ function LoggedLayout (props) {
 	}
 
   useEffect(()=> {
+    console.log(name)
     props.getUserProfile({
       name
     })

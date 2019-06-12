@@ -79,9 +79,10 @@ function Register(props) {
 		setProgress(100)
 		setIsUploading(false)
 
+		console.log(filename)
 		firebase
 		.storage
-		.ref()
+		.ref('profile')
 		.child(filename)
 		.getDownloadURL()
 		.then(url => setAvatarURL(url))
@@ -182,8 +183,8 @@ function Register(props) {
 
 	async function onRegister() {
 		try {
-			await firebase.register(name, email, password, 21, 'oliveira')
-			await firebase.addComplementsUser({ avatar, avatarURL, access })
+			await firebase.register({ name, email, password, avatarURL, access })
+			// await firebase.addComplementsUser({ avatarURL, access })
 			props.history.replace('/')
 		} catch(error) {
 			alert(error.message)

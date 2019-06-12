@@ -33,10 +33,15 @@ class Firebase {
 		return this.auth.signOut()
 	}
 
-	async register(name, email, password) {
-		await this.auth.createUserWithEmailAndPassword(email, password)
-		return this.auth.currentUser.updateProfile({
-			displayName: name
+	async register(user) {
+		console.log(user.avatarURL, 'PHOTO' , user)
+
+		const auth = this.auth
+		await auth.createUserWithEmailAndPassword(user.email, user.password)
+		return auth.currentUser.updateProfile({
+			displayName: user.name,
+			photoURL: user.avatarURL,
+			phoneNumber: user.access
 		})
 	}
 
@@ -44,8 +49,6 @@ class Firebase {
 		if(!this.auth.currentUser) {
 			return alert('Not authorized')
 		}
-		console.log(data, this.auth.currentUser)
-
 		return this.db
 		.doc(`users/${this.auth.currentUser.uid}`)
 		.set(data)
@@ -68,10 +71,12 @@ class Firebase {
 	}
 
 	async getCurrentUser() {
-		const client = await this.db.doc(`users/${this.auth.currentUser.uid}`).get()
+		// console.log(this.auth.currentUser)
+		const client = await this.auth.currentUser
 		return {
-			avatar: client.get('avatar'),
-			access: client.get('access')
+			avatar: client.photoURL,
+			access: client.phoneNumber,
+			name: client.displayName
 		}
 	}
 }

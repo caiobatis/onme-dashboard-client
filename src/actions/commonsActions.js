@@ -26,18 +26,10 @@ export const getUserProfile = (user) => {
     firebase
     .getCurrentUser()
     .then((res) => {
-      const path = firebase.storage.ref(res.avatar);
-      console.log(res.avatar)
-      path
-      .getDownloadURL()
-      .then((url) => { 
-        dispatch(receiveProfileUser({
-          ...user,
-          ...res,
-          avatar: url
-        }))
-      })
-
+      dispatch(receiveProfileUser({
+        ...user,
+        ...res
+      }))
     })
     .catch((error)=> (
       alert(error.message)
