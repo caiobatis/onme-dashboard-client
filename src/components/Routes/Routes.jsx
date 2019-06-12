@@ -9,6 +9,7 @@ import ClientsList from '../Clients/ClientsList';
 import ClientsCreate from '../Clients/ClientsCreate';
 import ClientsListItem from '../Clients/ClientsListItem';
 import ClientsEdit from '../Clients/ClientsEdit';
+import Profile from '../Profile/Profile';
 
 class Routes extends Component {
   render() {
@@ -19,6 +20,7 @@ class Routes extends Component {
             <Route exact path="/" component={HomePage} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/register" component={Register} />
+            <Route exact path="/perfil" component={Profile} />
             <Route exact path="/calculadora" component={Calculator} />
             <Route path='/clientes/edit/:id' component={ClientsEdit} />
             <Route path='/clientes/novo' component={ClientsCreate} />

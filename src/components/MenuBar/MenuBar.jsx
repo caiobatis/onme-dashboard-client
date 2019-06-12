@@ -31,15 +31,5 @@ export const mainItems = (
         <ListItemText primary="Calculadora" />
       </ListItem>
     </Link>
-    <Link
-      to="/login"
-    >
-      <ListItem button>
-        <ListItemIcon>
-          <BarChartIcon />
-        </ListItemIcon>
-        <ListItemText primary="Sair" />
-      </ListItem>
-    </Link>
   </div>
 )

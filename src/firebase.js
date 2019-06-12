@@ -39,11 +39,11 @@ class Firebase {
 		return auth.currentUser.updateProfile({
 			displayName: user.name,
 			photoURL: user.avatarURL,
-			phoneNumber: user.access
+			phoneNumber: '+16505550101' || user.access
 		})
 	}
 
-	addComplementsUser(data) {
+	addInformationToProfile(data) {
 		if(!this.auth.currentUser) {
 			return alert('Not authorized')
 		}
@@ -68,11 +68,22 @@ class Firebase {
 		return this.auth.currentUser && this.auth.currentUser.displayName
 	}
 
+	async getInformationProfile() {
+		return await this.db
+		.doc(`users/${this.auth.currentUser.uid}`)
+		.get()
+		.then(e => {
+			return e
+		})
+	}
+
 	getCurrentUser() {
 		const currentUser = this.auth.currentUser
+		if(!currentUser)
+			return {}
+
 		return {
 			photoURL: currentUser.photoURL,
-			access: currentUser.phoneNumber,
 			name: currentUser.displayName
 		}
 	}

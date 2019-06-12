@@ -3,7 +3,6 @@ import { connect } from "react-redux"
 import { bindActionCreators } from 'redux'
 import {
   receiveSearch,
-  setProfileUser,
   getUserProfile
 } from '../../actions/commonsActions'
 import clsx from 'clsx'
@@ -31,8 +30,12 @@ import MailIcon from '@material-ui/icons/Mail'
 import NotificationsIcon from '@material-ui/icons/Notifications'
 import Avatar from '@material-ui/core/Avatar'
 import firebase from '../../firebase'
+import {
+  withRouter
+} from 'react-router-dom'
 
-import CircularProgress from '@material-ui/core/CircularProgress';
+import CircularProgress from '@material-ui/core/CircularProgress'
+import Link from '../Link/Link'
 
 function MadeWithLove() {
   return (
@@ -210,6 +213,7 @@ function LoggedLayout (props) {
     props.getUserProfile()
   }, [])
   
+
   const handleDrawerOpen = () => {
     setOpen(true);
   }
@@ -246,15 +250,23 @@ function LoggedLayout (props) {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem onClick={handleMenuClose}>
+        <Link to="/perfil">
+          Meu perfil
+        </Link>
+      </MenuItem>
+      <MenuItem onClick={handleMenuClose}>
+        <Link to="/login">
+          Sair
+        </Link>
+      </MenuItem>
     </Menu>
   )
 
   return (
     <div className={classes.root}>
       {
-        props.loading && props.loading.fetch && (
+        loading && loading.fetch && (
           <div className={classes.loading}>
             <CircularProgress size={30}/>
           </div>
@@ -360,4 +372,4 @@ const mapDispatchToProps = dispatch => bindActionCreators({
 }, dispatch)
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(LoggedLayout);
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(LoggedLayout))

@@ -24,8 +24,12 @@ export const receiveProfileUser = data => ({
 export const getUserProfile = (user) => {
   return dispatch => {
     const _user = firebase.getCurrentUser()
-    dispatch(receiveProfileUser({
-      ...user, ..._user
-    }))
+    const info = firebase.getInformationProfile()
+
+    info.then(e=> {
+      dispatch(receiveProfileUser({
+        ...user, ..._user, access: Number(e.get('access'))
+      }))      
+    })
   }
 }

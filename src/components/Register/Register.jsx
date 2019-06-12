@@ -184,7 +184,7 @@ function Register(props) {
 	async function onRegister() {
 		try {
 			await firebase.register({ name, email, password, avatarURL, access })
-			// await firebase.addComplementsUser({ avatarURL, access })
+			await firebase.addInformationToProfile({ access })
 			props.history.replace('/')
 		} catch(error) {
 			alert(error.message)
