@@ -2,6 +2,7 @@ import app from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/firebase-firestore'
 import 'firebase/storage'
+import { getUserProfile } from './actions/commonsActions';
 
 const config = {
   apiKey: "AIzaSyDnU14UbTMS_8Ba9yVFz9tPH1hF2f7tCm4",
@@ -39,8 +40,23 @@ class Firebase {
 		return auth.currentUser.updateProfile({
 			displayName: user.name,
 			photoURL: user.avatarURL,
-			phoneNumber: '+16505550101' || user.access
 		})
+	}
+
+	async updateProfile(user, callback) {
+		const auth = this.auth
+		auth.currentUser.updateProfile({
+			displayName: user.name,
+			photoURL: user.avatarURL,
+			email: user.email
+		})
+		this.db.doc(`users/${this.auth.currentUser.uid}`)
+		.set({
+			access: user.access
+		})
+		return setTimeout(()=>{
+			return [getUserProfile(), callback]
+		}, 3000)
 	}
 
 	addInformationToProfile(data) {
@@ -84,7 +100,8 @@ class Firebase {
 
 		return {
 			photoURL: currentUser.photoURL,
-			name: currentUser.displayName
+			name: currentUser.displayName,
+			email: currentUser.email
 		}
 	}
 }
