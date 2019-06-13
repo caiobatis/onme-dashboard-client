@@ -1,14 +1,29 @@
 .wellcome {
-  padding: 25px;
+  padding: 15px;
+  display: flex;
+  width: 100%;
 
-  .h1 {
-    font-size: 42px;
-    text-transform: capitalize;
-    font-weight: 200;
-    color: #808290;
+  .image {
+    border-radius: 100px;
+    height: 100px;
+    width: 100px;
+    overflow: hidden;
+    margin-right: 20px;
   }
-  .p {
-    font-size: 18px;
-    color: #808290;
-  }
+
+  .content {
+
+    .h1 {
+      font-size: 42px;
+      text-transform: capitalize;
+      font-weight: 200;
+      color: #808290;
+      margin: 10px 0 0;
+    }
+    .p {
+      font-size: 18px;
+      color: #808290;
+      margin-left: 2px
+    }
+  } 
 }
