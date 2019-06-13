@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { bindActionCreators } from 'redux'
 import { connect } from "react-redux"
 import { Typography, Paper, Avatar, Button, FormControl, Input, InputLabel, Grid } from '@material-ui/core'
 import Radio from '@material-ui/core/Radio'
@@ -11,6 +12,7 @@ import { Link, withRouter } from 'react-router-dom'
 import firebase from '../../firebase'
 import LoggedLayout from '../DefaultLayout/LoggedLayout'
 import withStyles from '@material-ui/core/styles/withStyles'
+import { getUserProfile } from '../../actions/commonsActions';
 
 const styles = theme => ({
   main: {
@@ -57,8 +59,7 @@ function Profile(props) {
   const { 
     classes,
     profile
-  } = props 
-  
+  } = props
 
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
@@ -69,14 +70,12 @@ function Profile(props) {
   const [avatarURL, setAvatarURL] = useState('')
   const [isUploading, setIsUploading] = useState(false)
 
-
   useEffect(() => {
     setName(profile.name)
     setEmail(profile.email)
     setAccess(profile.access)
     setAvatarURL(profile.photoURL)
   }, [profile])
-
 
   function handleUploadStart() {
     setIsUploading(true)
@@ -208,7 +207,12 @@ function Profile(props) {
       delete data.password
 
 		try {
-			await firebase.updateProfile(data, props.history.replace('/'))
+      await firebase.updateProfile(data)
+      .then((e) => {
+        setTimeout(()=>{
+          props.history.replace('/')
+        }, 2000)
+      })
 		} catch(error) {
 			alert(error.message)
 		}
@@ -219,4 +223,8 @@ const mapStateToProps = state => ({
 	profile: state.commonsReducer.profile
 })
 
-export default connect(mapStateToProps)(withRouter(withStyles(styles)(Profile)))
+const mapDispatchToProps = dispatch => bindActionCreators({
+  getUserProfile
+}, dispatch)
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(withStyles(styles)(Profile)))

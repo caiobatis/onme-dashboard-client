@@ -43,20 +43,18 @@ class Firebase {
 		})
 	}
 
-	async updateProfile(user, callback) {
+	async updateProfile(user) {
 		const auth = this.auth
+		return [
 		auth.currentUser.updateProfile({
 			displayName: user.name,
 			photoURL: user.avatarURL,
 			email: user.email
-		})
+		}),
 		this.db.doc(`users/${this.auth.currentUser.uid}`)
 		.set({
 			access: user.access
-		})
-		return setTimeout(()=>{
-			return [getUserProfile(), callback]
-		}, 3000)
+		})]
 	}
 
 	addInformationToProfile(data) {
