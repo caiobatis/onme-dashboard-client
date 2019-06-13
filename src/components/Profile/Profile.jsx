@@ -64,7 +64,6 @@ function Profile(props) {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [access, setAccess] = useState('1')
-  const [password, setPassword] = useState('')
   const [progress, setProgress] = useState(0)
   const [avatar, setAvatar] = useState('')
   const [avatarURL, setAvatarURL] = useState('')
@@ -122,44 +121,42 @@ function Profile(props) {
                   <Input name="email" autoComplete="off" value={email} onChange={e => setEmail(e.target.value)}  />
                 </FormControl>
               </Grid>
-              <Grid item xs={3}>
-                <FormControl margin="normal" required fullWidth>
-                  <InputLabel htmlFor="password">Senha</InputLabel>
-                  <Input name="password" disabled type="password" id="password" autoComplete="off" value={password} onChange={e => setPassword(e.target.value)}  />
-                </FormControl>
-              </Grid>
             </Grid>
             <Grid container spacing={2}>
-              <Grid item xs={3}>
-                <FormControl component="fieldset" className={classes.formControl}>
-                  <FormLabel component="legend">Nivel de acesso</FormLabel>
-                  <RadioGroup
-                    aria-label="gender"
-                    name="gender2"
-                    value={access}
-                    onChange={(e)=> setAccess(e.target.value)}
-                  >
-                    <FormControlLabel
-                      value='1'
-                      control={<Radio color="primary" />}
-                      label="Nivel 1"
-                      labelPlacement="start"
-                    />
-                    <FormControlLabel
-                      value='2'
-                      control={<Radio color="primary" />}
-                      label="Nivel 2"
-                      labelPlacement="start"
-                    />
-                    <FormControlLabel
-                      value='3'
-                      control={<Radio color="primary" />}
-                      label="Nivel 3"
-                      labelPlacement="start"
-                    />
-                  </RadioGroup>
-                </FormControl>
-              </Grid>
+              {
+                access >= 2 && (
+                  <Grid item xs={3}>
+                    <FormControl component="fieldset" className={classes.formControl}>
+                      <FormLabel component="legend">Nivel de acesso</FormLabel>
+                      <RadioGroup
+                        aria-label="gender"
+                        name="gender2"
+                        value={access}
+                        onChange={(e)=> setAccess(e.target.value)}
+                      >
+                        <FormControlLabel
+                          value='1'
+                          control={<Radio color="primary" />}
+                          label="Nivel 1"
+                          labelPlacement="start"
+                        />
+                        <FormControlLabel
+                          value='2'
+                          control={<Radio color="primary" />}
+                          label="Nivel 2"
+                          labelPlacement="start"
+                        />
+                        <FormControlLabel
+                          value='3'
+                          control={<Radio color="primary" />}
+                          label="Nivel 3"
+                          labelPlacement="start"
+                        />
+                      </RadioGroup>
+                    </FormControl>
+                  </Grid>
+                )
+              }
               <Grid item xs={3}>
                 <label>Avatar:</label>
                 {isUploading && <p>Progress: {progress}</p>}
@@ -202,9 +199,7 @@ function Profile(props) {
 
 	async function updateProfile() {
 
-    const data = { name, email, password, avatarURL, access }
-    if(!password)
-      delete data.password
+    const data = { name, email, avatarURL, access }
 
 		try {
       await firebase.updateProfile(data)

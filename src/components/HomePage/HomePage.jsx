@@ -13,9 +13,11 @@ function HomePage(props) {
 			title="Home"
 		>
 			<div className={styles.wellcome}>
-				<div className={styles.image}>
-					<img src={profile.photoURL} alt={profile.name}/>
-				</div>
+				{profile.photoURL && (
+					<div className={styles.image}>
+						<img src={profile.photoURL} alt={profile.name}/>
+					</div>
+				)}
 				<div className={styles.content}>
 					<h1 className={styles.h1}>
 						Olá <b>{profile.name}</b>,

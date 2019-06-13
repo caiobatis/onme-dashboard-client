@@ -250,16 +250,20 @@ function LoggedLayout (props) {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <Link to="/perfil">
-        <MenuItem onClick={handleMenuClose}>
-          Meu perfil
-        </MenuItem>
-      </Link>
-      <Link to="/login">
-        <MenuItem onClick={handleMenuClose}>
-          Sair
-        </MenuItem>
-      </Link>
+      <div>
+        <Link to="/perfil">
+          <MenuItem>
+            Meu perfil
+          </MenuItem>
+        </Link>
+      </div>
+      <div>
+        <Link to="/login">
+          <MenuItem>
+            Sair
+          </MenuItem>
+        </Link>
+      </div>
     </Menu>
   )
 
