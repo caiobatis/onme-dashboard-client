@@ -9,6 +9,44 @@ import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
 import styles from './Calculator.scss'
 
+const cost = {
+  usd: 1.9,
+  eur: 1.9,
+  gpb: 3.7,
+  aud: 3.7,
+  cad: 3.7,
+  chf: 3.7,
+  jpy: 5.5,
+  nzd: 3.7,
+  clp: 9.5,
+  mxn: 9.5,
+  uyu: 9.5,
+  zar: 14,
+  ars: 9.5,
+  cny: 9.5
+}
+
+const margin = {
+  usd: 1.3,
+  eur: 1.3,
+  gpb: 2,
+  aud: 1.6,
+  cad: 2,
+  chf: 2.5,
+  jpy: 1.5,
+  nzd: 2,
+  clp: 3,
+  mxn: 5.5,
+  uyu: 6.5,
+  zar: 2.7,
+  ars: 10,
+  cny: 4.5
+}
+
+
+
+
+
 export default function CalculatorFair (props) {
     const [selected, setSelected] = useState([])
     const [coins, setCoins] = useState(props.coins);
@@ -68,11 +106,12 @@ export default function CalculatorFair (props) {
                     return true
                   }).map(row => {
                   const isItemSelected = isSelected(row.COD)
+                  const cod = row.COD.replace('BRL', '')
 
                   const comercial = row.OVD
-                  const custo = row.OVD * (1.9 / 100) + row.OVD
+                  const custo = row.OVD * (cost[cod.toLowerCase()] / 100) + row.OVD
                   const minSemIof = custo * (1 / 100) + custo
-                  const maxSemIof = custo * (1.3 / 100 ) + custo
+                  const maxSemIof = custo * (margin[cod.toLowerCase()] / 100 ) + custo
                   const minComIof = minSemIof * (1.1 / 100) + minSemIof
                   const maxComIof = maxSemIof * (1.1 / 100) + maxSemIof
 
@@ -88,14 +127,14 @@ export default function CalculatorFair (props) {
                       className={styles.item}
                     >
                       <TableCell>
-                        <div className={styles.name}>{row.COD.replace('BRL', '')}</div>
+                        <div className={styles.name}>{cod}</div>
                       </TableCell>
-                      <TableCell>{numeral(comercial).format('0.0000')}</TableCell>
-                      <TableCell>{numeral(custo).format('0.0000')}</TableCell>
-                      <TableCell align="right">{numeral(minSemIof).format('0.0000')}</TableCell>
-                      <TableCell align="right">{numeral(maxSemIof).format('0.0000')}</TableCell>
-                      <TableCell align="right">{numeral(minComIof).format('0.0000')}</TableCell>
-                      <TableCell align="right">{numeral(maxComIof).format('0.0000')}</TableCell>
+                      <TableCell>{numeral(comercial).format('0.00000')}</TableCell>
+                      <TableCell>{numeral(custo).format('0.00000')}</TableCell>
+                      <TableCell align="right">{numeral(minSemIof).format('0.00000')}</TableCell>
+                      <TableCell align="right">{numeral(maxSemIof).format('0.00000')}</TableCell>
+                      <TableCell align="right">{numeral(minComIof).format('0.00000')}</TableCell>
+                      <TableCell align="right">{numeral(maxComIof).format('0.00000')}</TableCell>
                       <TableCell align="right">Min 1%</TableCell>
                     </TableRow>
                   )}
