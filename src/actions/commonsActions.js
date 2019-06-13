@@ -25,7 +25,6 @@ export const getUserProfile = (user) => {
   return dispatch => {
     const _user = firebase.getCurrentUser()
     const info = firebase.getInformationProfile()
-    console.log(_user, info)
     info.then(e=> {
       dispatch(receiveProfileUser({
         ...user, ..._user, access: e.get('access')

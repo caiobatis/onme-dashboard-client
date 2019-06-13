@@ -77,6 +77,7 @@ function Calculator(props) {
 				getCalculatorFair()
 				break;
 			case 'frente':
+				getCalculatorFair()
 				getCalculatorFrente(_city)
 				break;
 		}
@@ -98,7 +99,8 @@ function Calculator(props) {
 		/> :
 		<CalculatorFrente
 			search={search}
-			coins={frente ? frente.content : [] }
+			coins={frente ? frente.content : []}
+			coinsFair={fair ? fair.content : []}
 		/>
 
 	return (

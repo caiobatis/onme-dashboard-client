@@ -12,14 +12,17 @@ import styles from './Calculator.scss'
 export default function CalculatorFrente (props) {
     const [selected, setSelected] = useState([])
     const [coins, setCoins] = useState(props.coins);
+    const [coinsFair, setCoinsFair] = useState(props.coinsFair);
 
     useEffect(() => {
       const {
+        coinsFair,
         coins
       } = props
 
+      setCoinsFair(coinsFair)
       setCoins(coins)
-    }, [props.coins])
+    }, [props.coinsFair, props.coins])
 
     function handleClick(event, name) {
       const selectedIndex = selected.indexOf(name);
@@ -40,6 +43,17 @@ export default function CalculatorFrente (props) {
   
       setSelected(newSelected);
     }
+
+    const getCoinbyFair = (cod) => {
+      let coin
+      (coinsFair || []).map(e =>{
+        if(e.COD.replace('BRL', '') === cod)
+          coin = e
+      })
+
+      return coin
+    }
+
 
     const isSelected = name => selected.indexOf(name) !== -1;
 
@@ -69,7 +83,7 @@ export default function CalculatorFrente (props) {
                   const cod = row.productCode
                   const isItemSelected = isSelected(cod)
 
-                  const comercial = row.OVD
+                  const comercial = getCoinbyFair(cod)
                   const semIof = row.sellPrice
                   const comIof = row.sellPrice * (1.1 / 100) + row.sellPrice
 
@@ -87,9 +101,9 @@ export default function CalculatorFrente (props) {
                       <TableCell>
                         <div className={styles.name}>{cod.replace('BRL', '')}</div>
                       </TableCell>
-                      <TableCell>{numeral(comercial).format('0.0000')}</TableCell>
-                      <TableCell>{numeral(semIof).format('0.0000')}</TableCell>
-                      <TableCell>{numeral(comIof).format('0.0000')}</TableCell>
+                      <TableCell>{numeral(comercial ? comercial.OVD : 0).format('0.00000')}</TableCell>
+                      <TableCell>{numeral(semIof).format('0.00000')}</TableCell>
+                      <TableCell>{numeral(comIof).format('0.00000')}</TableCell>
                       <TableCell align="right">Min 1%</TableCell>
                     </TableRow>
                   )}

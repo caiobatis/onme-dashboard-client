@@ -43,10 +43,6 @@ const margin = {
   cny: 4.5
 }
 
-
-
-
-
 export default function CalculatorFair (props) {
     const [selected, setSelected] = useState([])
     const [coins, setCoins] = useState(props.coins);
