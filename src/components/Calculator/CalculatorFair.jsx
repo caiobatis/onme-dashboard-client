@@ -12,7 +12,7 @@ import styles from './Calculator.scss'
 const cost = {
   usd: 1.9,
   eur: 1.9,
-  gpb: 3.7,
+  gbp: 3.7,
   aud: 3.7,
   cad: 3.7,
   chf: 3.7,
@@ -29,7 +29,7 @@ const cost = {
 const margin = {
   usd: 1.3,
   eur: 1.3,
-  gpb: 2,
+  gbp: 2,
   aud: 1.6,
   cad: 2,
   chf: 2.5,
