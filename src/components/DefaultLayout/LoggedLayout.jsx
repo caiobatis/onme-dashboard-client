@@ -16,7 +16,7 @@ import Container from '@material-ui/core/Container'
 import Grid from '@material-ui/core/Grid'
 import MenuIcon from '@material-ui/icons/Menu'
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
-import { mainItems } from '../MenuBar/MenuBar'
+import MenuBar from '../MenuBar/MenuBar'
 import Divider from '@material-ui/core/Divider'
 import List from '@material-ui/core/List'
 import MenuItem from '@material-ui/core/MenuItem'
@@ -348,7 +348,9 @@ function LoggedLayout (props) {
           </IconButton>
         </div>
         <Divider />
-        <List>{mainItems}</List>
+        <List>
+          <MenuBar/>
+        </List>
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />

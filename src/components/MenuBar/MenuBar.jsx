@@ -3,33 +3,73 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
-import BarChartIcon from '@material-ui/icons/ExitToApp';
 import LayersIcon from '@material-ui/icons/Layers';
 import Link from '../Link/Link';
 import styles from './MenuBar.scss'
+import List from '@material-ui/core/List';
+import Collapse from '@material-ui/core/Collapse';
+import InboxIcon from '@material-ui/icons/MoveToInbox';
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
 
-export const mainItems = (
-  <div className={styles.menuBar}>
-    <Link
-      to="/"
-    >
-      <ListItem button>
-        <ListItemIcon>
-          <LayersIcon />
-        </ListItemIcon>
-        <ListItemText primary="Home" />
-      </ListItem>
-    </Link>
+const MenuBar = () => {
+  
+  const [open, setOpen] = React.useState(false);
+  
+  function handleClick() {
+    setOpen(!open);
+  }
 
-    <Link
-      to="/calculadora"
-    >
-      <ListItem button>
+  return (
+    <div className={styles.menuBar}>
+      <Link
+        to="/"
+      >
+        <ListItem button>
+          <ListItemIcon>
+            <LayersIcon />
+          </ListItemIcon>
+          <ListItemText primary="Home" />
+        </ListItem>
+      </Link>
+
+      <ListItem button onClick={handleClick}>
         <ListItemIcon>
           <ShoppingCartIcon />
         </ListItemIcon>
-        <ListItemText primary="Calculadora" />
+        <ListItemText primary="Vendas" />
+        {open ? <ExpandLess /> : <ExpandMore />}
       </ListItem>
-    </Link>
-  </div>
-)
+      <Collapse in={open} timeout="auto" unmountOnExit>
+        <List component="div" disablePadding className={styles.collapse}>
+          <Link
+            to="/vendas"
+          >
+            <ListItem button>
+              <ListItemText primary="Listar vendas" />
+            </ListItem>
+          </Link>
+          <Link
+            to="/vendas/criar"
+          >
+            <ListItem button>
+              <ListItemText primary="Criar vendas" />
+            </ListItem>
+          </Link>
+        </List>
+      </Collapse>
+
+      <Link
+        to="/calculadora"
+      >
+        <ListItem button>
+          <ListItemIcon>
+            <InboxIcon />
+          </ListItemIcon>
+          <ListItemText primary="Calculadora" />
+        </ListItem>
+      </Link>
+    </div>
+  )
+}
+export default MenuBar
