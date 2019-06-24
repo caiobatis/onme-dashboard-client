@@ -1,20 +1,19 @@
 import React, { useState, useEffect } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from "react-redux"
-import { Typography, Paper, Avatar, Button, FormControl, Input, InputLabel, Grid } from '@material-ui/core'
+import { Paper, Avatar, Button, FormControl, Input, InputLabel, Grid } from '@material-ui/core'
 import Radio from '@material-ui/core/Radio'
 import RadioGroup from '@material-ui/core/RadioGroup'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import FormLabel from '@material-ui/core/FormLabel'
 import FileUploader from "react-firebase-file-uploader"
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
-import { Link, withRouter } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import firebase from '../../firebase'
 import LoggedLayout from '../DefaultLayout/LoggedLayout'
 import withStyles from '@material-ui/core/styles/withStyles'
 import { getUserProfile } from '../../actions/commonsActions';
 
-const styles = theme => ({
+export const styles = theme => ({
   main: {
     width: 'auto',
     display: 'block', // Fix IE 11 issue.
