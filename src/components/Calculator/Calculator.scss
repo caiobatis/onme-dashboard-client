@@ -72,3 +72,66 @@
 .actionsContainer {
   padding: 25px;
 }
+
+.listing {
+
+  .cod {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: #3f51b5;
+    border-radius: 40px;
+    color: #fff;
+    margin: 0 auto;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 10px
+  }
+  
+  [class*='MuiTableRow-root'] [class*='MuiTableCell-root'] {
+    padding: 10px;
+    max-height: 50px;
+  }
+
+  table {
+    .p {
+      margin: 0;
+      padding: 0;
+    }    
+  }
+  .client {
+    display: flex;
+    flex-direction: column;
+    .p {
+      color: #3f51b5;
+      font-size: 15px;
+    }
+    .span {
+      color: #707070;
+      display: block;
+      font-size: 13px;
+    }
+  }
+  .coin {
+    .span {
+      font-size: 15px;
+      color: #3f51b5;
+    }
+    .paymentOk {
+      color: rgb(69, 163, 97);
+    }
+  }
+  .send {
+    .span {
+      font-size: 15px;
+      color: #3f51b5;
+    }
+    .deliveryOk {
+      color: rgb(69, 163, 97);
+    }
+  }
+  
+  
+}
