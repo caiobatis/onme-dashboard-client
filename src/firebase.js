@@ -57,6 +57,17 @@ class Firebase {
 		})]
 	}
 
+	async createSales(sale) {
+		return this.db.collection('sales').add(sale)
+			.then((docRef) => {
+				return docRef
+			})
+			.catch((error) => {
+				console.error("Error adding document: ", error);
+				return error
+			});
+	}
+
 	addInformationToProfile(data) {
 		if(!this.auth.currentUser) {
 			return alert('Not authorized')

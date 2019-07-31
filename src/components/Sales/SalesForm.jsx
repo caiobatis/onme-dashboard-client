@@ -8,6 +8,8 @@ import firebase from '../../firebase'
 import {styles} from '../Profile/Profile'
 import withStyles from '@material-ui/core/styles/withStyles'
 import { getUserProfile } from '../../actions/commonsActions';
+import MaskedInput from 'react-text-mask';
+import NumberFormat from 'react-number-format';
 import classes from '../Calculator/Calculator.scss'
 
 const currencies = [
@@ -31,22 +33,126 @@ const _pago = [
   }
 ]
 
+function validateForm(form) {
+  if(!form.nome) {
+    alert('Por favor preencha o nome')
+    return false
+  }
+  if(!form.corretora) {
+    alert('Por favor insira a corretora')
+    return false
+  }
+  if(!form.cpf) {
+    alert('Por favor preencha o CPF')
+    return false
+  }
+  if(!form.quantidade) {
+    alert('Por favor preencha a quantidade')
+    return false
+  }
+  if(!form.taxa) {
+    alert('Por favor preencha a taxa')
+    return false
+  }
+  if(!form.moeda) {
+    alert('Por favor preencha a moeda')
+    return false
+  }
+  if(!form.dataEnterga) {
+    alert('Por favor preencha a data de entrega')
+    return false
+  }
+  if(!form.transporte) {
+    alert('Por favor preencha o transporte')
+    return false
+  }
+  return true
+}
+
+function FormatDate(props) {
+  const { inputRef, ...other } = props;
+
+  return (
+    <MaskedInput
+      {...other}
+      ref={ref => {
+        inputRef(ref ? ref.inputElement : null);
+      }}
+      mask={[/[0-9]/, /[0-9]/, '/', /[0-9]/, /[0-9]/, '/', /[0-9]/, /[0-9]/]}
+      placeholderChar={'\u2000'}
+      showMask
+    />
+  )
+}
+
+function TaxaFormat(props) {
+  const { inputRef, ...other } = props;
+
+  return (
+    <MaskedInput
+      {...other}
+      ref={ref => {
+        inputRef(ref ? ref.inputElement : null);
+      }}
+      mask={[/[0-9]/, '.', /[0-9]/, /[0-9]/, /[0-9]/, /[0-9]/]}
+      placeholderChar={'\u2000'}
+      showMask
+    />
+  )
+}
+
+function FormatCPF(props) {
+  const { inputRef, ...other } = props;
+
+  return (
+    <MaskedInput
+      {...other}
+      ref={ref => {
+        inputRef(ref ? ref.inputElement : null);
+      }}
+      mask={[/[0-9]/, /[0-9]/, /[0-9]/, '.', /[0-9]/, /[0-9]/, /[0-9]/, '.', /[0-9]/, /[0-9]/, /[0-9]/, '-', /[0-9]/, /[0-9]/]}
+      showMask
+    />
+  )
+}
+
+function NumberFormatCustom(props) {
+  const { inputRef, onChange, prefix, ...other } = props;
+
+  return (
+    <NumberFormat
+      {...other}
+      getInputRef={inputRef}
+      onValueChange={values => {
+        onChange({
+          target: {
+            value: values.value,
+          },
+        });
+      }}
+      thousandSeparator
+      prefix={prefix}
+    />
+  );
+}
+
 function SalesForm (props) {
   const { 
     profile
   } = props
 
   const [nome, setNome] = useState('')
-  const [cpf, setCpf] = useState('')
+  const [cpf, setCpf] = useState('-')
   const [corretora, setCorretora] = useState('fair')
   const [praca, setPraca] = useState('')
   const [quantidade, setQuantidade] = useState('')
   const [taxa, setTaxa] = useState('')
+  const [moeda, setMoeda] = useState('')
   const [total, setTotal] = useState('')
   const [comprovante, setComprovante] = useState('')
   const [pago, setPago] = useState(false)
   const [transporte, setTransporte] = useState('')
-  const [dataEnterga, setDataEnterga] = useState('')
+  const [dataEnterga, setDataEnterga] = useState('01012019')
   const [recebedor, setRecebedor] = useState('')
   const [custo, setCusto] = useState('')
   const [pagamento, setPagamento] = useState('')
@@ -56,14 +162,15 @@ function SalesForm (props) {
   const [sending, setSending] = useState(false)
 
   useEffect(() => {
-    // setName(profile.name)
-    // setEmail(profile.email)
-    // setAccess(profile.access)
-    // setAvatarURL(profile.photoURL)
-  }, [profile])
+    setTotal(quantidade * taxa)
+  }, [taxa, quantidade])
 
   function handleNext() {
     setActiveStep(prevActiveStep => prevActiveStep + 1);
+  }
+
+  function handleSubmit() {
+    submitForm()
   }
 
   function handleBack() {
@@ -103,13 +210,24 @@ function SalesForm (props) {
             <Grid item xs={3} >
               <FormControl margin="normal" required fullWidth>
                 <InputLabel htmlFor="nome">Nome</InputLabel>
-                <Input id="nome" name="nome" autoComplete="off" autoFocus value={nome} onChange={e => setNome(e.target.value)} />
+                <Input id="nome"
+                  name="nome"
+                  autoComplete="off"
+                  autoFocus
+                  value={nome}
+                  onChange={e => setNome(e.target.value)} />
               </FormControl>
             </Grid>
             <Grid item xs={3} >
               <FormControl margin="normal" required fullWidth>
                 <InputLabel htmlFor="cpf">CPF</InputLabel>
-                <Input id="cpf" name="cpf" autoComplete="off" autoFocus value={cpf} onChange={e => setCpf(e.target.value)} />
+                <Input id="cpf"
+                  name="cpf"
+                  autoComplete="off"
+                  autoFocus
+                  inputComponent={FormatCPF}
+                  value={cpf}
+                  onChange={e => setCpf(e.target.value)} />
               </FormControl>
             </Grid>
           </Grid>
@@ -123,23 +241,42 @@ function SalesForm (props) {
           <Grid container spacing={2}>
             <Grid item xs={3} >
               <FormControl margin="normal" required fullWidth>
+                <InputLabel htmlFor="moeda">Moeda</InputLabel>
+                <Input 
+                  id="moeda"
+                  name="moeda"
+                  autoComplete="off" autoFocus
+                  value={moeda}
+                  onChange={e => setMoeda(e.target.value)} />
+              </FormControl>
+            </Grid>
+            <Grid item xs={3} >
+              <FormControl margin="normal" required fullWidth>
                 <InputLabel htmlFor="quantidade">Quantidade</InputLabel>
-                <Input id="quantidade" name="quantidade" autoComplete="off" autoFocus 
-                value={quantidade} onChange={e => setQuantidade(e.target.value)} />
+                <Input 
+                  id="quantidade"
+                  name="quantidade"
+                  autoComplete="off" autoFocus
+                  value={quantidade}
+                  inputComponent={NumberFormatCustom}
+                  onChange={e => setQuantidade(e.target.value)} />
               </FormControl>
             </Grid>
             <Grid item xs={3} >
               <FormControl margin="normal" required fullWidth>
                 <InputLabel htmlFor="taxa">Taxa</InputLabel>
-                <Input id="taxa" autoComplete="off" autoFocus value={taxa} 
+                <Input id="taxa"
+                autoComplete="off"
+                autoFocus value={taxa} 
+                inputComponent={TaxaFormat}
                 onChange={e => setTaxa(e.target.value)} />
               </FormControl>
             </Grid>
             <Grid item xs={3} >
               <FormControl margin="normal" disabled required fullWidth>
                 <InputLabel htmlFor="total">Total</InputLabel>
-                <Input id="total" name="total" autoComplete="off" autoFocus value={total} 
-                onChange={e => setTotal(e.target.value)} />
+                <Input id="total" name="total" autoComplete="off" autoFocus value={total}
+                  inputComponent={NumberFormatCustom}/>
               </FormControl>
             </Grid>
             <Grid item xs={3} >
@@ -190,7 +327,8 @@ function SalesForm (props) {
             <Grid item xs={3} >
               <FormControl margin="normal" required fullWidth>
                 <InputLabel htmlFor="dataEnterga">Data de Enterga</InputLabel>
-                <Input id="dataEnterga" autoComplete="off" autoFocus value={dataEnterga} 
+                <Input id="dataEnterga" autoComplete="off" autoFocus value={dataEnterga}
+                  inputComponent={FormatDate}
                 onChange={e => setDataEnterga(e.target.value)} />
               </FormControl>
             </Grid>
@@ -203,23 +341,23 @@ function SalesForm (props) {
             </Grid>
             <Grid item xs={3} >
               <FormControl margin="normal" fullWidth>
-                <InputLabel htmlFor="comprovante">Comprovante</InputLabel>
-                <Input id="comprovante" name="comprovante" autoComplete="off" autoFocus value={comprovante} 
-                onChange={e => setComprovante(e.target.value)} />
+                <InputLabel htmlFor="pagamento">pagamento</InputLabel>
+                <Input id="pagamento" name="pagamento" autoComplete="off" autoFocus value={pagamento} 
+                onChange={e => setPagamento(e.target.value)} />
               </FormControl>
             </Grid>
             <Grid item xs={3} >
               <FormControl margin="normal" fullWidth>
-                <InputLabel htmlFor="custo">custo</InputLabel>
+                <InputLabel htmlFor="custo">Custo</InputLabel>
                 <Input id="custo" name="custo" autoComplete="off" autoFocus value={custo} 
                 onChange={e => setCusto(e.target.value)} />
               </FormControl>
             </Grid>
             <Grid item xs={3} >
               <FormControl margin="normal" fullWidth>
-                <InputLabel htmlFor="comprovante">Comprovante</InputLabel>
-                <Input id="comprovante" name="comprovante" autoComplete="off" autoFocus value={comprovante} 
-                onChange={e => setComprovante(e.target.value)} />
+                <InputLabel htmlFor="obs">Observação</InputLabel>
+                <Input id="obs" name="obs" autoComplete="off" autoFocus value={obs} 
+                onChange={e => setObs(e.target.value)} />
               </FormControl>
             </Grid>
           </Grid>
@@ -254,52 +392,54 @@ function SalesForm (props) {
               <Button
                 variant="contained"
                 color="primary"
-                onClick={handleNext}
+                onClick={activeStep === steps.length - 1 ? handleSubmit : handleNext}
                 className={classes.button}
               >
                 {activeStep === steps.length - 1 ? 'Finalizar venda' : 'Continuar'}
               </Button>
             </div>
           </div>
-
-          {/* <Grid container spacing={2}>
-            <Grid item xs={3}>
-              <Button
-                disabled={sending}
-                type="submit"
-                fullWidth
-                variant="contained"
-                color="primary"
-                onClick={updateProfile}
-                className={classes.submit}
-              >
-                Atualizar perfil
-              </Button>
-            </Grid>
-          </Grid> */}
         </Paper>
       </form>
     </div>
   )
 
-  async function updateProfile() {
-  
-    // const data = { name, email, avatarURL, access }
-    const data = { nome } 
-  
-    try {
-      await firebase.updateProfile(data)
-      .then((e) => {
-        setTimeout(()=>{
-          props.history.replace('/')
-        }, 2000)
-      })
-    } catch(error) {
-      alert(error.message)
-    }
+  async function submitForm() {
+    const data = { 
+      nome,
+      cpf,
+      corretora,
+      praca,
+      quantidade,
+      taxa,
+      total,
+      comprovante,
+      pago,
+      transporte,
+      dataEnterga,
+      recebedor,
+      custo,
+      pagamento,
+      obs,
+      moeda
+     }
+
+     if(validateForm(data)) {
+       try {
+         await firebase.createSales(data)
+         .then((e) => {
+           console.log(e);
+           setTimeout(()=>{
+             props.history.push("/vendas")
+           }, 2000)
+         })
+       } catch(error) {
+         alert(error.message)
+       }
+     }
+
   }
 }
-
 
 const mapStateToProps = state => ({
 })
