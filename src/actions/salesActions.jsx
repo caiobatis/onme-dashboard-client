@@ -12,6 +12,7 @@ export const getAddress = cep => {
     })
 }
 
+
 // export async function getAddress (cep) {
 //   const {
 //     name, email, password

@@ -6,11 +6,12 @@ import TableCell from '@material-ui/core/TableCell'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import Paper from '@material-ui/core/Paper'
-import { Grid, Breadcrumbs, Link, Typography, Button } from '@material-ui/core';
+import { Grid, Breadcrumbs, Typography, Button } from '@material-ui/core';
 import {
   Home as HomeIcon
 } from '@material-ui/icons'
 import firebase from '../../firebase';
+import { Link } from 'react-router-dom'
 import styles from '../Calculator/Calculator.scss'
 
 export default class SalesIndex extends Component {
@@ -39,19 +40,6 @@ export default class SalesIndex extends Component {
   }
 
   render() {
-    function createData(name, paymentOk, fat, carbs, protein, deliveryOk) {
-      return { name, paymentOk, fat, carbs, protein, deliveryOk };
-    }
-    
-    const rows = [
-      createData('Frente', true, 6.0, 24, 4.0),
-      createData('Frente', false, 9.0, 37, 4.3),
-      createData('Fair', true, 16.0, 24, 6.0, true),
-      createData('Frente', true, 3.7, 67, 4.3, true),
-      createData('Fair', false, 16.0, 49, 3.9),
-    ]
-    console.log(this.state.sales)
-
     return (
       <LoggedLayout title="Vendas">
         <main className={styles.main}>
@@ -74,11 +62,18 @@ export default class SalesIndex extends Component {
             <Grid container>
               <Grid item xs={12}>
                 <div className={styles.alignRigth}>
+
+                <Link
+                  to="/vendas/criar"
+                  color="inherit"
+                  className={styles.link}
+                >
                   <Button
                     className={styles.secundary}
                   >
                     Nova venda
                   </Button>
+                </Link>                  
                 </div>
               </Grid>
             </Grid>
@@ -100,7 +95,7 @@ export default class SalesIndex extends Component {
                     {this.state.sales.map((row, i) => (
                       <TableRow key={i}>
                         <TableCell component="th" scope="row">
-                          <div className={styles.cod}>{row.name}</div>
+                          <div className={styles.cod}>{row.nome.split('')[0]}</div>
                         </TableCell>
                         <TableCell>
                           <div className={styles.client}>
@@ -116,16 +111,20 @@ export default class SalesIndex extends Component {
                         </TableCell>
                         <TableCell>
                           <div className={styles.send}>
-                            <p className={styles.p}>Rua Bento Rodrigues, 177 - 04939120 - São Paulo</p>
+                            <p className={styles.p}>{row.endereco}, {row.numero} - {row.cep} - {row.cidade}</p>
                             <span className={styles.span}>{row.dataEntrega} | { row.entregue ? <b className={styles.deliveryOk}>Entregue</b> : <b>Não entregue</b> }</span>
                           </div>
                         </TableCell>
                         <TableCell align="right">
-                          <Button
-                            className={styles.editItem}
+                          <Link
+                            to={`/vendas/${row.id}`}
                           >
-                            Editar
-                          </Button>
+                            <Button
+                              className={styles.editItem}
+                            >
+                              Editar
+                            </Button>
+                          </Link>
                         </TableCell>
                       </TableRow>
                     ))}

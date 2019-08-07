@@ -187,7 +187,8 @@ function NumberFormatCustom(props) {
 
 function SalesForm (props) {
   const { 
-    profile
+    item,
+    edit
   } = props
 
   const [nome, setNome] = useState('')
@@ -217,16 +218,44 @@ function SalesForm (props) {
   useEffect(() => {
     setTotal(quantidade * taxa)
   }, [taxa, quantidade])
+  
+  useEffect(() => {
+
+    if(item) {
+      setNome(item.nome)
+      setCpf(item.cpf)
+      setCorretora(item.corretora)
+      setPraca(item.praca)
+      setQuantidade(item.quantidade)
+      setTaxa(item.taxa)
+      setMoeda(item.moeda)
+      setTotal(item.total)
+      setComprovante(item.comprovante)
+      setPago(item.pago)
+      setEntregue(item.entregue)
+      setCep(item.cep)
+      setEndereco(item.endereco)
+      setNumero(item.numero)
+      setCidade(item.cidade)
+      setTransporte(item.transporte)
+      setdataEntrega(item.dataEntrega)
+      setRecebedor(item.recebedor)
+      setCusto(item.custo)
+      setObs(item.obs)
+    }
+  }, [item])
 
 
   useEffect(() => {
-    const _cep = cep.replace(' ', '').replace('-', '').replace(' ', '')
-    if(_cep.length === 8) {
-      let infos = getAddress(_cep)
-      infos.then(adr =>{
-        setEndereco(adr.logradouro ? adr.logradouro : '')
-        setCidade(adr.localidade ? adr.localidade : '')
-      })
+    if(cep) {
+      const _cep = cep.replace(' ', '').replace('-', '').replace(' ', '')
+      if(_cep.length === 8) {
+        let infos = getAddress(_cep)
+        infos.then(adr =>{
+          setEndereco(adr.logradouro ? adr.logradouro : '')
+          setCidade(adr.localidade ? adr.localidade : '')
+        })
+      }
     }
 
   }, [cep])
@@ -512,7 +541,7 @@ function SalesForm (props) {
                 onClick={activeStep === steps.length - 1 ? handleSubmit : handleNext}
                 className={classes.button}
               >
-                {activeStep === steps.length - 1 ? 'Finalizar venda' : 'Continuar'}
+                {activeStep === steps.length - 1 ? (edit ? 'Atualizar venda' :'Finalizar venda') : 'Continuar'}
               </Button>
             </div>
           </div>
@@ -547,18 +576,37 @@ function SalesForm (props) {
      }
 
      if(validateForm(data)) {
-       try {
-         await firebase.createSales(data)
-         .then((e) => {
-           console.log(e);
-           setTimeout(()=>{
-             props.history.push("/vendas")
-           }, 2000)
-         })
-       } catch(error) {
-         alert(error.message)
-       }
-     }
+
+      if(edit) {
+        const updateRef = firebase.db.collection('sales').doc(props.match.params.id)
+    
+        updateRef.set(data)
+        .then(docRef => {
+          alert('Venda atualizada com sucesso')
+          props.history.push("/vendas")
+        })
+        .catch((error) => {
+          console.error("Error adding document: ", error)
+        })
+
+
+      } else {
+
+        try {
+          await firebase.createSales(data)
+          .then((e) => {
+           alert('Venda criada com sucesso')
+            setTimeout(()=>{
+              props.history.push("/vendas")
+            }, 2000)
+          })
+        } catch(error) {
+          alert(error.message)
+        }
+      }
+    }
+
+
 
   }
 }
