@@ -10,12 +10,35 @@ import { Grid, Breadcrumbs, Link, Typography, Button } from '@material-ui/core';
 import {
   Home as HomeIcon
 } from '@material-ui/icons'
+import firebase from '../../firebase';
 import styles from '../Calculator/Calculator.scss'
 
 export default class SalesIndex extends Component {
+  constructor(props) {
+    super(props);
+    this.ref = firebase.db.collection('sales');
+    this.unsubscribe = null;
+    this.state = {
+      sales: []
+    };
+  }
+
+  onCollectionUpdate = (querySnapshot) => {
+    const sales = [];
+    querySnapshot.forEach((doc) => {
+      const data = doc.data()
+      sales.push({...data, id: doc.id});
+    });
+    this.setState({
+      sales
+   });
+  }
+
+  componentDidMount() {
+    this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
+  }
+
   render() {
-
-
     function createData(name, paymentOk, fat, carbs, protein, deliveryOk) {
       return { name, paymentOk, fat, carbs, protein, deliveryOk };
     }
@@ -26,7 +49,8 @@ export default class SalesIndex extends Component {
       createData('Fair', true, 16.0, 24, 6.0, true),
       createData('Frente', true, 3.7, 67, 4.3, true),
       createData('Fair', false, 16.0, 49, 3.9),
-    ];
+    ]
+    console.log(this.state.sales)
 
     return (
       <LoggedLayout title="Vendas">
@@ -73,27 +97,27 @@ export default class SalesIndex extends Component {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {rows.map((row, i) => (
+                    {this.state.sales.map((row, i) => (
                       <TableRow key={i}>
                         <TableCell component="th" scope="row">
                           <div className={styles.cod}>{row.name}</div>
                         </TableCell>
                         <TableCell>
                           <div className={styles.client}>
-                            <p className={styles.p}>Caio Batista</p>
-                            <span className={styles.span}>417.876.438-10</span>
+                            <p className={styles.p}>{row.nome}</p>
+                            <span className={styles.span}>{row.cpf}</span>
                           </div>
                         </TableCell>
                         <TableCell>
                           <div className={styles.coin}>
-                            <p className={styles.p}><b>USD 4000.00</b></p>
-                            <span className={styles.span}>Taxa 4.1698 | { row.paymentOk ? <b className={styles.paymentOk}>Pago</b> : <b>Não pago</b> }</span>
+                            <p className={styles.p}><b>{row.moeda} {row.quantidade}</b></p>
+                            <span className={styles.span}>Taxa {row.taxa} | { row.pago ? <b className={styles.paymentOk}>Pago</b> : <b>Não pago</b> }</span>
                           </div>
                         </TableCell>
                         <TableCell>
                           <div className={styles.send}>
                             <p className={styles.p}>Rua Bento Rodrigues, 177 - 04939120 - São Paulo</p>
-                            <span className={styles.span}>05/07/19 | { row.deliveryOk ? <b className={styles.deliveryOk}>Entregue</b> : <b>Não entregue</b> }</span>
+                            <span className={styles.span}>{row.dataEntrega} | { row.entregue ? <b className={styles.deliveryOk}>Entregue</b> : <b>Não entregue</b> }</span>
                           </div>
                         </TableCell>
                         <TableCell align="right">

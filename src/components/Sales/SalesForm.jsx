@@ -11,6 +11,7 @@ import { getUserProfile } from '../../actions/commonsActions';
 import MaskedInput from 'react-text-mask';
 import NumberFormat from 'react-number-format';
 import classes from '../Calculator/Calculator.scss'
+import { getAddress } from '../../actions/salesActions';
 
 const currencies = [
   {
@@ -58,12 +59,24 @@ function validateForm(form) {
     alert('Por favor preencha a moeda')
     return false
   }
-  if(!form.dataEnterga) {
+  if(!form.dataEntrega) {
     alert('Por favor preencha a data de entrega')
     return false
   }
   if(!form.transporte) {
     alert('Por favor preencha o transporte')
+    return false
+  }
+  if(!form.cep) {
+    alert('Por favor preencha o CEP')
+    return false
+  }
+  if(!form.endereco) {
+    alert('Por favor preencha o endereço')
+    return false
+  }
+  if(!form.numero) {
+    alert('Por favor preencha o numero')
     return false
   }
   return true
@@ -101,6 +114,22 @@ function TaxaFormat(props) {
   )
 }
 
+function CepFormat(props) {
+  const { inputRef, ...other } = props;
+
+  return (
+    <MaskedInput
+      {...other}
+      ref={ref => {
+        inputRef(ref ? ref.inputElement : null);
+      }}
+      mask={[/[0-9]/, /[0-9]/, /[0-9]/,/[0-9]/,/[0-9]/, '-', /[0-9]/, /[0-9]/, /[0-9]/]}
+      placeholderChar={'\u2000'}
+      showMask
+    />
+  )
+}
+
 function FormatCPF(props) {
   const { inputRef, ...other } = props;
 
@@ -114,6 +143,26 @@ function FormatCPF(props) {
       showMask
     />
   )
+}
+
+function MoneyFormatCustom(props) {
+  const { inputRef, onChange, prefix, ...other } = props;
+
+  return (
+    <NumberFormat
+      {...other}
+      getInputRef={inputRef}
+      onValueChange={values => {
+        onChange({
+          target: {
+            value: values.value,
+          },
+        });
+      }}
+      thousandSeparator
+      prefix={'R$'}
+    />
+  );
 }
 
 function NumberFormatCustom(props) {
@@ -151,11 +200,15 @@ function SalesForm (props) {
   const [total, setTotal] = useState('')
   const [comprovante, setComprovante] = useState('')
   const [pago, setPago] = useState(false)
+  const [entregue, setEntregue] = useState(false)
+  const [cep, setCep] = useState('')
+  const [endereco, setEndereco] = useState('')
+  const [numero, setNumero] = useState('')
+  const [cidade, setCidade] = useState('')
   const [transporte, setTransporte] = useState('')
-  const [dataEnterga, setDataEnterga] = useState('01012019')
+  const [dataEntrega, setdataEntrega] = useState('01012019')
   const [recebedor, setRecebedor] = useState('')
   const [custo, setCusto] = useState('')
-  const [pagamento, setPagamento] = useState('')
   const [obs, setObs] = useState('')
 
   const [activeStep, setActiveStep] = useState(0)
@@ -164,6 +217,19 @@ function SalesForm (props) {
   useEffect(() => {
     setTotal(quantidade * taxa)
   }, [taxa, quantidade])
+
+
+  useEffect(() => {
+    const _cep = cep.replace(' ', '').replace('-', '').replace(' ', '')
+    if(_cep.length === 8) {
+      let infos = getAddress(_cep)
+      infos.then(adr =>{
+        setEndereco(adr.logradouro ? adr.logradouro : '')
+        setCidade(adr.localidade ? adr.localidade : '')
+      })
+    }
+
+  }, [cep])
 
   function handleNext() {
     setActiveStep(prevActiveStep => prevActiveStep + 1);
@@ -317,6 +383,37 @@ function SalesForm (props) {
       content: (
         <div>
           <Grid container spacing={2}>
+            <Grid item xs={2} >
+              <FormControl margin="normal" required fullWidth>
+                <InputLabel htmlFor="cep">CEP</InputLabel>
+                <Input id="cep" name="cep" autoComplete="off" autoFocus 
+                inputComponent={CepFormat}
+                value={cep} onChange={e => setCep(e.target.value)} />
+              </FormControl>
+            </Grid>
+            <Grid item xs={4} >
+              <FormControl margin="normal" required fullWidth>
+                <InputLabel htmlFor="endereco">Endereço</InputLabel>
+                <Input id="endereco" name="endereco" autoComplete="off" autoFocus 
+                value={endereco} onChange={e => setEndereco(e.target.value)} />
+              </FormControl>
+            </Grid>
+            <Grid item xs={2} >
+              <FormControl margin="normal" required fullWidth>
+                <InputLabel htmlFor="numero">Numero</InputLabel>
+                <Input id="numero" name="numero" autoComplete="off" autoFocus 
+                value={numero} onChange={e => setNumero(e.target.value)} />
+              </FormControl>
+            </Grid>
+            <Grid item xs={3} >
+              <FormControl margin="normal" required fullWidth>
+                <InputLabel htmlFor="cidade">Cidade</InputLabel>
+                <Input id="cidade" name="cidade" autoComplete="off" autoFocus 
+                value={cidade} onChange={e => setCidade(e.target.value)} />
+              </FormControl>
+            </Grid>
+          </Grid>
+          <Grid container spacing={2}>
             <Grid item xs={3} >
               <FormControl margin="normal" required fullWidth>
                 <InputLabel htmlFor="transporte">Transporte</InputLabel>
@@ -326,10 +423,10 @@ function SalesForm (props) {
             </Grid>
             <Grid item xs={3} >
               <FormControl margin="normal" required fullWidth>
-                <InputLabel htmlFor="dataEnterga">Data de Enterga</InputLabel>
-                <Input id="dataEnterga" autoComplete="off" autoFocus value={dataEnterga}
+                <InputLabel htmlFor="dataEntrega">Data de Enterga</InputLabel>
+                <Input id="dataEntrega" autoComplete="off" autoFocus value={dataEntrega}
                   inputComponent={FormatDate}
-                onChange={e => setDataEnterga(e.target.value)} />
+                onChange={e => setdataEntrega(e.target.value)} />
               </FormControl>
             </Grid>
             <Grid item xs={3} >
@@ -340,17 +437,37 @@ function SalesForm (props) {
               </FormControl>
             </Grid>
             <Grid item xs={3} >
-              <FormControl margin="normal" fullWidth>
-                <InputLabel htmlFor="pagamento">pagamento</InputLabel>
-                <Input id="pagamento" name="pagamento" autoComplete="off" autoFocus value={pagamento} 
-                onChange={e => setPagamento(e.target.value)} />
-              </FormControl>
+              <FormControl margin="normal" required fullWidth>
+                <TextField
+                  select
+                  label="Entregue?"
+                  className={classes.textField}
+                  value={entregue}
+                  onChange={e => setEntregue(e.target.value)}
+                  SelectProps={{
+                    MenuProps: {
+                      className: classes.menu,
+                    },
+                  }}
+                >
+                  {_pago.map(option => (
+                    <MenuItem key={option.value} value={option.value}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </FormControl>              
             </Grid>
             <Grid item xs={3} >
               <FormControl margin="normal" fullWidth>
                 <InputLabel htmlFor="custo">Custo</InputLabel>
-                <Input id="custo" name="custo" autoComplete="off" autoFocus value={custo} 
-                onChange={e => setCusto(e.target.value)} />
+                <Input id="custo" name="custo"
+                  autoComplete="off" 
+                  value={custo} 
+                  inputComponent={MoneyFormatCustom}
+                  autoFocus 
+                  onChange={e => setCusto(e.target.value)} />
+
               </FormControl>
             </Grid>
             <Grid item xs={3} >
@@ -416,12 +533,17 @@ function SalesForm (props) {
       comprovante,
       pago,
       transporte,
-      dataEnterga,
+      dataEntrega,
       recebedor,
       custo,
-      pagamento,
+      entregue,
       obs,
-      moeda
+      moeda,
+      cep,
+      endereco,
+      numero,
+      entregue,
+      cidade
      }
 
      if(validateForm(data)) {

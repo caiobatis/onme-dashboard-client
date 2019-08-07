@@ -10,6 +10,13 @@ const api = axios.create({
   baseURL
 })
 
+export const getAddressResource = cep => {
+  return new Promise((resolve, reject) => 
+    axios.get(`https://viacep.com.br/ws/${cep}/json/`)
+      .then((res) => resolve(res))
+      .catch((res) => reject(res)))
+}
+
 export const postContact = values => {
   console.log(values)
   return new Promise((resolve, reject) => 
