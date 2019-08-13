@@ -15,9 +15,14 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 const MenuBar = () => {
   
   const [open, setOpen] = React.useState(false);
+  const [extrato, setExtrato] = React.useState(false);
   
   function handleClick() {
     setOpen(!open);
+  }
+
+  function handleClickExtrato() {
+    setExtrato(!extrato);
   }
 
   return (
@@ -54,6 +59,31 @@ const MenuBar = () => {
           >
             <ListItem button>
               <ListItemText primary="Criar vendas" />
+            </ListItem>
+          </Link>
+        </List>
+      </Collapse>
+      <ListItem button onClick={handleClickExtrato}>
+        <ListItemIcon>
+          <ShoppingCartIcon />
+        </ListItemIcon>
+        <ListItemText primary="Extrato" />
+        {extrato ? <ExpandLess /> : <ExpandMore />}
+      </ListItem>
+      <Collapse in={extrato} timeout="auto" unmountOnExit>
+        <List component="div" disablePadding className={styles.collapse}>
+          <Link
+            to="/extrato/vendas"
+          >
+            <ListItem button>
+              <ListItemText primary="Extrato de vendas" />
+            </ListItem>
+          </Link>
+          <Link
+            to="/extrato/custos"
+          >
+            <ListItem button>
+              <ListItemText primary="Extrato de custos" />
             </ListItem>
           </Link>
         </List>

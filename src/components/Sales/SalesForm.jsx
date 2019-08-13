@@ -12,6 +12,7 @@ import MaskedInput from 'react-text-mask';
 import NumberFormat from 'react-number-format';
 import classes from '../Calculator/Calculator.scss'
 import { getAddress } from '../../actions/salesActions';
+import moment from 'moment'
 
 const currencies = [
   {
@@ -211,7 +212,7 @@ function SalesForm (props) {
   const [recebedor, setRecebedor] = useState('')
   const [custo, setCusto] = useState('')
   const [obs, setObs] = useState('')
-
+  const [data_sale, setData] = useState(moment().format("YYYY-MM-DD"))
   const [activeStep, setActiveStep] = useState(0)
   const [sending, setSending] = useState(false)
 
@@ -242,6 +243,7 @@ function SalesForm (props) {
       setRecebedor(item.recebedor)
       setCusto(item.custo)
       setObs(item.obs)
+      item.data_sale && setData(moment.unix(item.data_sale).format("YYYY-MM-DD"))
     }
   }, [item])
 
@@ -334,6 +336,21 @@ function SalesForm (props) {
       content: (
         <div>
           <Grid container spacing={2}>
+            <Grid item xs={3} >
+              <FormControl margin="normal" required fullWidth>
+                {/* <InputLabel htmlFor="moeda">Data da venda</InputLabel> */}
+                <TextField
+                  id="data"
+                  label="Data da venda"
+                  type="date"
+                  defaultValue={data_sale}
+                  onChange={e => setData(e.target.value)}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+              </FormControl>
+            </Grid>
             <Grid item xs={3} >
               <FormControl margin="normal" required fullWidth>
                 <InputLabel htmlFor="moeda">Moeda</InputLabel>
@@ -511,7 +528,7 @@ function SalesForm (props) {
       )
     }
   ]
-
+  
   return (
     <div>
       <form className={classes.form} onSubmit={e => e.preventDefault() && false }>
@@ -572,8 +589,16 @@ function SalesForm (props) {
       endereco,
       numero,
       entregue,
-      cidade
+      cidade,
+      'data_sale': moment(data_sale).unix()
      }
+
+     var date = new Date(moment(data_sale).format('LLLL'))
+     var firstDay = moment(new Date(date.getFullYear(), date.getMonth(), 1)).unix()
+     var lastDay = moment(new Date(date.getFullYear(), date.getMonth() + 1, 0)).unix()
+
+     data.firstDay = firstDay
+     data.lastDay = lastDay
 
      if(validateForm(data)) {
 

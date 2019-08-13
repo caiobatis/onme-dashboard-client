@@ -35,6 +35,7 @@ export default class SalesEdit extends Component {
       }
     })
   }
+  
   render() {
     console.log(this.state.item)
     return (

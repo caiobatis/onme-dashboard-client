@@ -13,6 +13,8 @@ import Profile from '../Profile/Profile';
 import SalesIndex from '../Sales/SalesIndex'
 import SalesCreate from '../Sales/SalesCreate'
 import SalesEdit from '../Sales/SalesEdit'
+import ExtractSales from '../Extract/ExtractSales';
+import ExtractCosts from '../Extract/ExtractCosts';
 
 class Routes extends Component {
   render() {
@@ -35,6 +37,9 @@ class Routes extends Component {
             <Route path='/vendas/criar' component={SalesCreate} />
             <Route path='/vendas/:id' component={SalesEdit} />
             <Route path='/vendas' component={SalesIndex} />
+
+            <Route path='/extrato/vendas' component={ExtractSales} />
+            <Route path='/extrato/custos' component={ExtractCosts} />
 
             <Route exact path="/*" component={Login} />
           </Switch>
