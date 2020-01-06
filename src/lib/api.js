@@ -11,34 +11,45 @@ const api = axios.create({
 })
 
 export const getAddressResource = cep => {
-  return new Promise((resolve, reject) => 
+  return new Promise((resolve, reject) =>
     axios.get(`https://viacep.com.br/ws/${cep}/json/`)
       .then((res) => resolve(res))
       .catch((res) => reject(res)))
 }
 
 export const postContact = values => {
-  console.log(values)
-  return new Promise((resolve, reject) => 
+  return new Promise((resolve, reject) =>
     api.post(`/contact`, values)
       .then((res) => resolve(res))
       .catch((res) => reject(res)))
 }
 
 export const calculatorFairResource = () => {
-  return new Promise((resolve, reject) => 
+  return new Promise((resolve, reject) =>
     axios.get(`${enfoque}${params}`)
       .then((res) => resolve(res))
       .catch((res) => reject(res)))
 }
 
 export const calculatorFrenteResource = (city = 'WL-ONME-SP') => {
-  return new Promise((resolve, reject) => 
+  return new Promise((resolve, reject) =>
     axios.get(`https://api.frentecorretora.com.br/v1/exchanges/products/${city}`)
       .then((res) => resolve(res))
       .catch((res) => reject(res)))
 }
 
+export const calculatorSagiturResource = () => {
+  return new Promise((resolve, reject) =>
+    axios.get(`${enfoque}${params}`)
+      .then((res) => resolve(res))
+      .catch((res) => reject(res)))
+}
+export const calculatorVisionResource = () => {
+  return new Promise((resolve, reject) =>
+    axios.get(`${enfoque}${params}`)
+      .then((res) => resolve(res))
+      .catch((res) => reject(res)))
+}
 // export const registerResource = values => {
 //   const {
 //     name, email, password

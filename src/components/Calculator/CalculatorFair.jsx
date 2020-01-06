@@ -16,14 +16,14 @@ const cost = {
   aud: 4.0,
   cad: 4.0,
   chf: 4.0,
-  jpy: 5.5,
+  jpy: 7.0,
   nzd: 4.0,
-  clp: 9.5,
-  mxn: 9.5,
-  uyu: 9.5,
-  zar: 14,
-  ars: 9.5,
-  cny: 9.5
+  clp: 13.0,
+  mxn: 13.0,
+  uyu: 13.0,
+  zar: 13.0,
+  ars: 45.0,
+  cny: 13.0
 }
 
 const margin = {
