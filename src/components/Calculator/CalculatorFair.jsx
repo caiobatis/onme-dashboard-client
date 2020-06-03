@@ -5,12 +5,13 @@ import TableBody from '@material-ui/core/TableBody'
 import TableCell from '@material-ui/core/TableCell'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
+import Modal from '@material-ui/core/Modal'
 import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
 import styles from './Calculator.scss'
 
 const cost = {
-  usd: 2.0,
+  usd: 5.0,
   eur: 2.0,
   gbp: 4.0,
   aud: 4.0,
@@ -46,6 +47,30 @@ const margin = {
 export default function CalculatorFair (props) {
     const [selected, setSelected] = useState([])
     const [coins, setCoins] = useState(props.coins);
+    const [currentMargin, setMargin] = useState(margin);
+    const [currentCost, setCost] = useState(cost);
+
+    const [open, setOpen] = useState(false);
+  
+    const handleOpen = () => {
+      setOpen(true);
+    };
+  
+    const handleClose = () => {
+      setOpen(false);
+    };
+    
+    const newCost = (val, item) => {
+      const _cost = currentCost
+      
+      _cost[item] = Number(val)
+      console.log(_cost)
+      setCost(_cost)
+
+      props.update()
+
+    };
+  
 
     useEffect(() => {
       const {
@@ -54,6 +79,15 @@ export default function CalculatorFair (props) {
 
       setCoins(coins)
     }, [props.coins])
+    
+    // useEffect(() => {
+    //   const {
+    //     coins
+    //   } = props
+
+    //   setCoins(coins)
+
+    // }, [currentCost])
 
     function handleClick(event, name) {
       const selectedIndex = selected.indexOf(name);
@@ -76,9 +110,49 @@ export default function CalculatorFair (props) {
     }
 
     const isSelected = name => selected.indexOf(name) !== -1;
-
+    // console.log(currentCost);
     return (
       <div className={styles.listCoins}>
+        <button type="button" onClick={handleOpen}>
+          Alterar valores de custo/margem
+        </button>
+        <Modal
+          aria-labelledby="simple-modal-title"
+          aria-describedby="simple-modal-description"
+          open={open}
+          onClose={handleClose}
+        >
+          <div className={styles.paperModal}>
+            <Table className={styles.table}>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Custo</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+              {
+                ([]).map(e => {
+                  return (
+                  <TableRow
+                    hover
+                    role="checkbox"
+                    tabIndex={-1}
+                    className={styles.item}
+                  >
+                    <TableCell>
+
+                    </TableCell>
+                  </TableRow>
+
+                  )
+
+                })
+              }
+              </TableBody>
+            </Table>
+          </div>
+        </Modal>
+
         <Grid item xs={12}>
           <Paper className={styles.paper}>
             <Table className={styles.table}>
@@ -92,22 +166,30 @@ export default function CalculatorFair (props) {
                   <TableCell align="right">Min com IOF </TableCell>
                   <TableCell align="right">Max com IOF </TableCell>
                   <TableCell align="right">Observação</TableCell>
+                  <TableCell align="right">Custo Moeda</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {(coins || []).filter(e => { 
-                    if(props.search) {
-                      return e.COD.toLowerCase().includes(props.search) || e.COD.toUpperCase().includes(props.search) 
-                    }
-                    return true
-                  }).map(row => {
+                {(coins || [])
+                .filter(e => { 
+                  if(props.search) {
+                    return e.COD.toLowerCase().includes(props.search) || e.COD.toUpperCase().includes(props.search) 
+                  }
+                  return true
+                })
+                .map(row => {
                   const isItemSelected = isSelected(row.COD)
                   const cod = row.COD.replace('BRL', '')
-
+                  // console.log(currentCost[cod.toLowerCase()] );
                   const comercial = row.OVD
-                  const custo = row.OVD * (cost[cod.toLowerCase()] / 100) + row.OVD
+                  const custo = row.OVD * (currentCost[cod.toLowerCase()] / 100) + row.OVD
+                  
+                  if(cod.toLowerCase() === 'usd') {
+                    console.log(custo, cod.toLowerCase());
+
+                  }
                   const minSemIof = custo * (1 / 100) + custo
-                  const maxSemIof = custo * (margin[cod.toLowerCase()] / 100 ) + custo
+                  const maxSemIof = custo * (currentMargin[cod.toLowerCase()] / 100 ) + custo
                   const minComIof = minSemIof * (1.1 / 100) + minSemIof
                   const maxComIof = maxSemIof * (1.1 / 100) + maxSemIof
 
@@ -126,12 +208,18 @@ export default function CalculatorFair (props) {
                         <div className={styles.name}>{cod}</div>
                       </TableCell>
                       <TableCell>{numeral(comercial).format('0.00000')}</TableCell>
-                      <TableCell>{numeral(custo).format('0.00000')}</TableCell>
+                      <TableCell>{numeral(custo).format('0.00000')} {custo}</TableCell>
                       <TableCell align="right">{numeral(minSemIof).format('0.00000')}</TableCell>
                       <TableCell align="right">{numeral(maxSemIof).format('0.00000')}</TableCell>
                       <TableCell align="right">{numeral(minComIof).format('0.00000')}</TableCell>
                       <TableCell align="right">{numeral(maxComIof).format('0.00000')}</TableCell>
                       <TableCell align="right">Min 1%</TableCell>
+                      <TableCell align="right">
+                        <input
+                          type="text"
+                          onChange={e=>newCost(e.target.value, cod.toLowerCase())}
+                        />
+                      </TableCell>
                     </TableRow>
                   )}
                 )}

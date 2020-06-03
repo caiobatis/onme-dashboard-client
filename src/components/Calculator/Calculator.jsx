@@ -99,6 +99,7 @@ function Calculator(props) {
 				return <CalculatorFair
 						search={search}
 						coins={fair ? fair.content : []}
+						update={getCalculatorFair}
 					/>
 
 			case 'frente':

@@ -135,3 +135,13 @@
   
   
 }
+
+
+.paperModal {
+  left: calc(50vw - 200px);
+  top: 10vh;
+  position: fixed;
+  width: 400px;
+  background: #fff;
+  padding: 20px;
+}
