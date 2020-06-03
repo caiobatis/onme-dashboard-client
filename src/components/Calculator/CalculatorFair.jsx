@@ -10,8 +10,8 @@ import Paper from '@material-ui/core/Paper'
 import styles from './Calculator.scss'
 
 const cost = {
-  usd: 2.0,
-  eur: 2.0,
+  usd: 1.6,
+  eur: 1.8,
   gbp: 4.0,
   aud: 4.0,
   cad: 4.0,
@@ -43,102 +43,103 @@ const margin = {
   cny: 4.5
 }
 
-export default function CalculatorFair (props) {
-    const [selected, setSelected] = useState([])
-    const [coins, setCoins] = useState(props.coins);
+export default function CalculatorFair(props) {
+  const [selected, setSelected] = useState([])
+  const [coins, setCoins] = useState(props.coins);
 
-    useEffect(() => {
-      const {
-        coins
-      } = props
+  useEffect(() => {
+    const {
+      coins
+    } = props
 
-      setCoins(coins)
-    }, [props.coins])
+    setCoins(coins)
+  }, [props.coins])
 
-    function handleClick(event, name) {
-      const selectedIndex = selected.indexOf(name);
-      let newSelected = [];
-  
-      if (selectedIndex === -1) {
-        newSelected = newSelected.concat(selected, name);
-      } else if (selectedIndex === 0) {
-        newSelected = newSelected.concat(selected.slice(1));
-      } else if (selectedIndex === selected.length - 1) {
-        newSelected = newSelected.concat(selected.slice(0, -1));
-      } else if (selectedIndex > 0) {
-        newSelected = newSelected.concat(
-          selected.slice(0, selectedIndex),
-          selected.slice(selectedIndex + 1),
-        );
-      }
-  
-      setSelected(newSelected);
+  function handleClick(event, name) {
+    const selectedIndex = selected.indexOf(name);
+    let newSelected = [];
+
+    if (selectedIndex === -1) {
+      newSelected = newSelected.concat(selected, name);
+    } else if (selectedIndex === 0) {
+      newSelected = newSelected.concat(selected.slice(1));
+    } else if (selectedIndex === selected.length - 1) {
+      newSelected = newSelected.concat(selected.slice(0, -1));
+    } else if (selectedIndex > 0) {
+      newSelected = newSelected.concat(
+        selected.slice(0, selectedIndex),
+        selected.slice(selectedIndex + 1),
+      );
     }
 
-    const isSelected = name => selected.indexOf(name) !== -1;
+    setSelected(newSelected);
+  }
 
-    return (
-      <div className={styles.listCoins}>
-        <Grid item xs={12}>
-          <Paper className={styles.paper}>
-            <Table className={styles.table}>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Moeda</TableCell>
-                  <TableCell>Comercial</TableCell>
-                  <TableCell>Custo ONME</TableCell>
-                  <TableCell align="right">Min sem IOF </TableCell>
-                  <TableCell align="right">Max sem IOF </TableCell>
-                  <TableCell align="right">Min com IOF </TableCell>
-                  <TableCell align="right">Max com IOF </TableCell>
-                  <TableCell align="right">Observação</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {(coins || []).filter(e => { 
-                    if(props.search) {
-                      return e.COD.toLowerCase().includes(props.search) || e.COD.toUpperCase().includes(props.search) 
-                    }
-                    return true
-                  }).map(row => {
-                  const isItemSelected = isSelected(row.COD)
-                  const cod = row.COD.replace('BRL', '')
+  const isSelected = name => selected.indexOf(name) !== -1;
 
-                  const comercial = row.OVD
-                  const custo = row.OVD * (cost[cod.toLowerCase()] / 100) + row.OVD
-                  const minSemIof = custo * (1 / 100) + custo
-                  const maxSemIof = custo * (margin[cod.toLowerCase()] / 100 ) + custo
-                  const minComIof = minSemIof * (1.1 / 100) + minSemIof
-                  const maxComIof = maxSemIof * (1.1 / 100) + maxSemIof
+  return (
+    <div className={styles.listCoins}>
+      <Grid item xs={12}>
+        <Paper className={styles.paper}>
+          <Table className={styles.table}>
+            <TableHead>
+              <TableRow>
+                <TableCell>Moeda</TableCell>
+                <TableCell>Comercial</TableCell>
+                <TableCell>Custo ONME</TableCell>
+                <TableCell align="right">Min sem IOF </TableCell>
+                <TableCell align="right">Max sem IOF </TableCell>
+                <TableCell align="right">Min com IOF </TableCell>
+                <TableCell align="right">Max com IOF </TableCell>
+                <TableCell align="right">Observação</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {(coins || []).filter(e => {
+                if (props.search) {
+                  return e.COD.toLowerCase().includes(props.search) || e.COD.toUpperCase().includes(props.search)
+                }
+                return true
+              }).map(row => {
+                const isItemSelected = isSelected(row.COD)
+                const cod = row.COD.replace('BRL', '')
 
-                  return (
-                    <TableRow
-                      hover
-                      aria-checked={isItemSelected}
-                      selected={isItemSelected}
-                      onClick={event => handleClick(event, row.COD)}
-                      role="checkbox"
-                      tabIndex={-1}
-                      key={row.COD}
-                      className={styles.item}
-                    >
-                      <TableCell>
-                        <div className={styles.name}>{cod}</div>
-                      </TableCell>
-                      <TableCell>{numeral(comercial).format('0.00000')}</TableCell>
-                      <TableCell>{numeral(custo).format('0.00000')}</TableCell>
-                      <TableCell align="right">{numeral(minSemIof).format('0.00000')}</TableCell>
-                      <TableCell align="right">{numeral(maxSemIof).format('0.00000')}</TableCell>
-                      <TableCell align="right">{numeral(minComIof).format('0.00000')}</TableCell>
-                      <TableCell align="right">{numeral(maxComIof).format('0.00000')}</TableCell>
-                      <TableCell align="right">Min 1%</TableCell>
-                    </TableRow>
-                  )}
-                )}
-              </TableBody>
-            </Table>
-          </Paper>
-        </Grid>
-      </div>
-    )
+                const comercial = row.OVD
+                const custo = row.OVD * (cost[cod.toLowerCase()] / 100) + row.OVD
+                const minSemIof = custo * (1 / 100) + custo
+                const maxSemIof = custo * (margin[cod.toLowerCase()] / 100) + custo
+                const minComIof = minSemIof * (1.1 / 100) + minSemIof
+                const maxComIof = maxSemIof * (1.1 / 100) + maxSemIof
+
+                return (
+                  <TableRow
+                    hover
+                    aria-checked={isItemSelected}
+                    selected={isItemSelected}
+                    onClick={event => handleClick(event, row.COD)}
+                    role="checkbox"
+                    tabIndex={-1}
+                    key={row.COD}
+                    className={styles.item}
+                  >
+                    <TableCell>
+                      <div className={styles.name}>{cod}</div>
+                    </TableCell>
+                    <TableCell>{numeral(comercial).format('0.00000')}</TableCell>
+                    <TableCell>{numeral(custo).format('0.00000')}</TableCell>
+                    <TableCell align="right">{numeral(minSemIof).format('0.00000')}</TableCell>
+                    <TableCell align="right">{numeral(maxSemIof).format('0.00000')}</TableCell>
+                    <TableCell align="right">{numeral(minComIof).format('0.00000')}</TableCell>
+                    <TableCell align="right">{numeral(maxComIof).format('0.00000')}</TableCell>
+                    <TableCell align="right">Min 1%</TableCell>
+                  </TableRow>
+                )
+              }
+              )}
+            </TableBody>
+          </Table>
+        </Paper>
+      </Grid>
+    </div>
+  )
 } 
