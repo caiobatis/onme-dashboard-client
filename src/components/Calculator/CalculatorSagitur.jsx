@@ -10,8 +10,8 @@ import Paper from '@material-ui/core/Paper'
 import styles from './Calculator.scss'
 
 const cost = {
-    usd: 1.9,
-    eur: 2.1,
+    usd: 1,
+    eur: 1.8,
     gbp: 4.0,
     aud: 4.0,
     cad: 4.0,
