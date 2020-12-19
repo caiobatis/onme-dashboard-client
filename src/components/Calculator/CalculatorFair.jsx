@@ -10,7 +10,7 @@ import Paper from '@material-ui/core/Paper'
 import styles from './Calculator.scss'
 
 const cost = {
-  usd: 1.6,
+  usd: 1.8,
   eur: 1.8,
   gbp: 4.0,
   aud: 4.0,
@@ -26,9 +26,9 @@ const cost = {
   cny: 13.0
 }
 
-const margin = {
-  usd: 1.3,
-  eur: 1.3,
+const marginMax = {
+  usd: 1.6,
+  eur: 1.7,
   gbp: 2,
   aud: 1.6,
   cad: 2,
@@ -41,6 +41,23 @@ const margin = {
   zar: 2.7,
   ars: 10,
   cny: 4.5
+}
+
+const marginMin = {
+  usd: 1.3,
+  eur: 1.3,
+  gbp: 1,
+  aud: 1,
+  cad: 1,
+  chf: 1,
+  jpy: 1,
+  nzd: 1,
+  clp: 1,
+  mxn: 1,
+  uyu: 1,
+  zar: 1,
+  ars: 1,
+  cny: 1
 }
 
 export default function CalculatorFair(props) {
@@ -107,9 +124,9 @@ export default function CalculatorFair(props) {
                 const comercial = row.OVD
                 const custo = row.OVD * (cost[cod.toLowerCase()] / 100) + row.OVD
                 const minSemIof = custo * (1 / 100) + custo
-                const maxSemIof = custo * (margin[cod.toLowerCase()] / 100) + custo
-                const minComIof = minSemIof * (1.1 / 100) + minSemIof
-                const maxComIof = maxSemIof * (1.1 / 100) + maxSemIof
+                const maxSemIof = custo * (marginMax[cod.toLowerCase()] / 100) + custo
+                const minComIof = minSemIof * (marginMin[cod.toLowerCase()] / 100) + minSemIof
+                const maxComIof = maxSemIof * (marginMax[cod.toLowerCase()] / 100) + maxSemIof
 
                 return (
                   <TableRow
@@ -131,7 +148,7 @@ export default function CalculatorFair(props) {
                     <TableCell align="right">{numeral(maxSemIof).format('0.00000')}</TableCell>
                     <TableCell align="right">{numeral(minComIof).format('0.00000')}</TableCell>
                     <TableCell align="right">{numeral(maxComIof).format('0.00000')}</TableCell>
-                    <TableCell align="right">Min 1%</TableCell>
+                    <TableCell align="right">Min {marginMin[cod.toLowerCase()]}%</TableCell>
                   </TableRow>
                 )
               }
