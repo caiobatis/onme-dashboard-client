@@ -3,7 +3,7 @@ import axios from 'axios'
 
 // const baseURL = 'http://webservice.enfoque.com.br/wsFoccoCambio/cotacoes.asmx/MoedasJSON?login=wsFoccoCambio2016&senha=Moedas2016'
 const baseURL = 'http://localhost:5000/api'
-const enfoque = 'http://webservice.enfoque.com.br/wsFoccoCambio/cotacoes.asmx/MoedasJSON'
+const enfoque = 'https://webservice.enfoque.com.br/wsFoccoCambio/cotacoes.asmx/MoedasJSON'
 const params = '?login=wsFoccoCambio2016&senha=Moedas2016'
 
 const api = axios.create({
