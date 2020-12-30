@@ -123,10 +123,10 @@ export default function CalculatorFair(props) {
 
                 const comercial = row.OVD
                 const custo = row.OVD * (cost[cod.toLowerCase()] / 100) + row.OVD
-                const minSemIof = custo * (1 / 100) + custo
+                const minSemIof = custo * (marginMin[cod.toLowerCase()] / 100) + custo
                 const maxSemIof = custo * (marginMax[cod.toLowerCase()] / 100) + custo
-                const minComIof = minSemIof * (marginMin[cod.toLowerCase()] / 100) + minSemIof
-                const maxComIof = maxSemIof * (marginMax[cod.toLowerCase()] / 100) + maxSemIof
+                const minComIof = minSemIof * (1.1 / 100) + minSemIof
+                const maxComIof = maxSemIof * (1.1 / 100) + maxSemIof
 
                 return (
                   <TableRow
